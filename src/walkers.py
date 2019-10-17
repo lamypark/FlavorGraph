@@ -58,8 +58,9 @@ class MetaPathWalker(object):
 
         with open("./input/metapaths/metapaths_{}_{}.txt".format(num_walks, len(meta_paths)), "w") as fw:
             for walk in walks:
-                for word in walk:
-                    fw.write("{} ".format(word_dict[word]))
+                for node in walk:
+                    node_info = self.graph.nodes[node]
+                    fw.write("{} ".format(node))
                 fw.write("\n")
 
     def meta_walk(self, node_info, start_node, meta_path):

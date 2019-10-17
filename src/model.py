@@ -43,7 +43,7 @@ class SkipGramModel(nn.Module):
         #     f.write('%d %d\n' % (len(id2word), self.emb_dimension))
         for wid, w in id2word.items():
             try:
-                embed_dict[w.split("@")[1]] = embedding[wid]
+                embed_dict[w] = embedding[wid]
                 # e = ' '.join(map(lambda x: str(x), embedding[wid]))
                 # f.write('%s %s\n' % (w, e))
             except:

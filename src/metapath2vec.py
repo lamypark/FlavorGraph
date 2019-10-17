@@ -16,12 +16,11 @@ class Metapath2Vec:
         self.metapaths = metapathwalker.generate_metapaths(args)
         if not args.skip_meta:
             metapathwalker.create_metapath_walks(args.num_walks, self.metapaths)
-        self.inputFileName = "./input/flavornet_metapaths_{}_{}.txt".format(args.num_walks, len(self.meta_paths))
+        self.inputFileName = "./input/metapaths/metapaths_{}_{}.txt".format(args.num_walks, len(self.metapaths))
 
         # 2. read data
-        #self.data = DataReader(args.min_count, args.care_type, args.num_walks, self.metapaths, self.inputFileName, args.skip_meta)
+        self.data = DataReader(args.min_count, args.care_type, args.num_walks, self.metapaths, self.inputFileName)
 
-        """
         # 3. make dataset for training
         dataset = Metapath2vecDataset(self.data, args.window_size)
         self.dataloader = DataLoader(dataset, batch_size=args.batch_size,
@@ -40,8 +39,6 @@ class Metapath2Vec:
         self.device = torch.device("cuda" if self.use_cuda else "cpu")
         if self.use_cuda:
             self.skip_gram_model.cuda()
-
-        """
 
     def train(self):
         for iteration in range(self.iterations):
@@ -62,16 +59,15 @@ class Metapath2Vec:
                     loss = self.skip_gram_model.forward(pos_u, pos_v, neg_v)
                     loss.backward()
                     optimizer.step()
-
                     running_loss = running_loss * 0.9 + loss.item() * 0.1
-                    if i > 0 and i % 500 == 0:
+                    if i > 0 and i % 300 == 0:
                         print(" Loss: " + str(running_loss))
 
             self.skip_gram_model.save_embedding(self.data.id2word, self.output_file_name)
 
 class DataReader:
     NEGATIVE_TABLE_SIZE = 1e8
-    def __init__(self, min_count, care_type, num_walks, meta_paths, inputFileName, skip_meta=False):
+    def __init__(self, min_count, care_type, num_walks, meta_paths, inputFileName):
         self.negatives = []
         self.discards = []
         self.negpos = 0
@@ -180,7 +176,6 @@ class Metapath2vecDataset(Dataset):
                                 continue
                             pair_catch.append((u, v, self.data.getNegatives(v,5)))
                     return pair_catch
-
 
     @staticmethod
     def collate(batches):

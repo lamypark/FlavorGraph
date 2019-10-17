@@ -3,6 +3,7 @@ input/Im2recipe/
 input/FlavorDB/
 input/HyperFoods/
 input/metapaths/
+input/*.pickle
 
 # output files
 output/*.html

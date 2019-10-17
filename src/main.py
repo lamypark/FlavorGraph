@@ -3,6 +3,7 @@ from parser import parameter_parser
 from utils import tab_printer, graph_reader
 
 from metapath2vec import Metapath2Vec
+from plotter import plot_graph, plot_embedding
 
 #from splitter import SplitterTrainer
 #from preprocessor import data_reader_small
@@ -21,6 +22,7 @@ def main():
     1. read graph
     """
     graph = graph_reader(args.input_nodes, args.input_edges)
+    plot_graph(graph)
 
     """
     2. Simple Node2vec with DeepWalker - Ingredient-Ingredient
@@ -30,7 +32,7 @@ def main():
     """
     3. Metapath2vec with MetaPathWalker - Ingredient-Ingredient / Ingredient-Food-like Compound / Ingredient-Drug-like Compound
     """
-    m2v = Metapath2Vec(args, graph)
+    #m2v = Metapath2Vec(args, graph)
     #m2v.train()
 
     #trainer = SplitterTrainer(graph, args, node2ingr)
