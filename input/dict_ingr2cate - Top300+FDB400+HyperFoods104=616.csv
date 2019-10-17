@@ -1,0 +1,617 @@
+ingredient,category
+abalone,Seafood
+acorn,Nut/Seed
+active_dry_yeast,Fungus
+adzuki_bean,Cereal/Crop/Bean
+agar,Plant/Vegetable
+agave,Plant/Vegetable
+albacore_tuna,Seafood
+alfalfa,Plant/Vegetable
+all_purpose_flour,Cereal/Crop/Bean
+allspice,Spice
+almond,Nut/Seed
+almond_extract,Nut/Seed
+amaranth,Flower
+anchovy,Seafood
+angelica,Plant/Vegetable
+anise,Spice
+apple,Fruit
+apple_brandy,Beverage Alcoholic
+apple_cider_vinegar,Sauce/Powder/Dressing
+apricot,Fruit
+arrowroot,Sauce/Powder/Dressing
+artichoke,Plant/Vegetable
+asparagus,Plant/Vegetable
+avocado,Fruit
+bacon,Meat/Animal Product
+bagel,Bakery/Dessert/Snack
+baking_powder,Sauce/Powder/Dressing
+baking_soda,Sauce/Powder/Dressing
+balsamic_vinegar,Sauce/Powder/Dressing
+bamboo_shoot,Plant/Vegetable
+banana,Fruit
+barbecue_sauce,Sauce/Powder/Dressing
+barley,Cereal/Crop/Bean
+bartlett_pear,Fruit
+basil,Plant/Vegetable
+basil_leaf,Plant/Vegetable
+basmati_rice,Cereal/Crop/Bean
+bay_leaf,Plant/Vegetable
+bean,Cereal/Crop/Bean
+beef,Meat/Animal Product
+beef_broth,Meat/Animal Product
+beer,Beverage Alcoholic
+beetroot,Plant/Vegetable
+bell_pepper,Plant/Vegetable
+berry,Fruit
+biscuit,Bakery/Dessert/Snack
+bittersweet_chocolate,Bakery/Dessert/Snack
+black_bean,Cereal/Crop/Bean
+black_currant,Fruit
+black_eyed_pea,Cereal/Crop/Bean
+black_olive,Essential Oil/Fat
+black_pepper,Plant/Vegetable
+black_raspberry,Fruit
+black_tea,Plant/Vegetable
+black_walnut,Cereal/Crop/Bean
+blackberry,Fruit
+blackberry_brandy,Beverage Alcoholic
+blue_cheese,Dairy
+blueberry,Fruit
+bluefish,Seafood
+boiling_water,Beverage
+boneless_skinless_chicken_breast,Meat/Animal Product
+boneless_skinless_chicken_breast_half,Meat/Animal Product
+boysenberry,Fruit
+brandy,Beverage Alcoholic
+brazil_nut,Nut/Seed
+bread,Bakery/Dessert/Snack
+bread_flour,Bakery/Dessert/Snack
+breadcrumb,Bakery/Dessert/Snack
+breadfruit,Plant/Vegetable
+breakfast_cereal,Cereal/Crop/Bean
+broad_bean,Cereal/Crop/Bean
+broccoli,Plant/Vegetable
+broccoli_floret,Plant/Vegetable
+brown_sugar,Sauce/Powder/Dressing
+brussels_sprout,Plant/Vegetable
+buffalo,Meat/Animal Product
+bulgur,Dish/End Product
+burrito,Dish/End Product
+butter,Dairy
+buttermilk,Dairy
+butternut_squash,Plant/Vegetable
+cabbage,Plant/Vegetable
+cake,Bakery/Dessert/Snack
+cake_flour,Cereal/Crop/Bean
+camembert_cheese,Dairy
+candy_bar,Bakery/Dessert/Snack
+canola_oil,Essential Oil/Fat
+caper,Cereal/Crop/Bean
+capsicum,Spice
+cardamom,Spice
+cardoon,Plant/Vegetable
+carom_seed,Plant/Vegetable
+carrot,Plant/Vegetable
+cashew_nut,Cereal/Crop/Bean
+cassava,Plant/Vegetable
+cassia,Plant/Vegetable
+caster_sugar,Sauce/Powder/Dressing
+catfish,Seafood
+cauliflower,Flower
+caviar,Seafood
+cayenne,Plant/Vegetable
+cayenne_pepper,Plant/Vegetable
+celery,Plant/Vegetable
+celery_rib,Plant/Vegetable
+champagne,Beverage Alcoholic
+chayote,Plant/Vegetable
+cheddar_cheese,Dairy
+cheese,Dairy
+cherry,Fruit
+cherry_brandy,Beverage Alcoholic
+cherry_pepper,Plant/Vegetable
+cherry_tomato,Plant/Vegetable
+chervil,Plant/Vegetable
+chestnut,Nut/Seed
+chicken,Meat/Animal Product
+chicken_breast,Meat/Animal Product
+chicken_broth,Meat/Animal Product
+chicken_stock,Sauce/Powder/Dressing
+chickpea,Cereal/Crop/Bean
+chili,Spice
+chili_powder,Sauce/Powder/Dressing
+chinese_cabbage,Plant/Vegetable
+chinese_mustard,Sauce/Powder/Dressing
+chive,Plant/Vegetable
+chocolate,Bakery/Dessert/Snack
+chocolate_chip,Bakery/Dessert/Snack
+chocolate_spread,Bakery/Dessert/Snack
+cider,Beverage
+cider_vinegar,Sauce/Powder/Dressing
+cilantro,Plant/Vegetable
+cinnamon,Spice
+cinnamon_stick,Plant/Vegetable
+citrus_fruit,Fruit
+clam,Seafood
+clementine,Plant/Vegetable
+clove,Spice
+coarse_salt,Sauce/Powder/Dressing
+cocoa,Plant/Vegetable
+cocoa_butter,Dairy
+cocoa_powder,Sauce/Powder/Dressing
+coconut,Fruit
+coconut_milk,Dairy
+coffee,Beverage
+cold_water,Beverage
+comte_cheese,Dairy
+conch,Seafood
+condensed_milk,Dairy
+confectioners'_sugar,Sauce/Powder/Dressing
+cooked_chicken,Meat/Animal Product
+cooked_rice,Cereal/Crop/Bean
+cooking_oil,Essential Oil/Fat
+cooking_spray,ETC
+coriander,Plant/Vegetable
+corn,Cereal/Crop/Bean
+corn_chip,Bakery/Dessert/Snack
+corn_oil,Essential Oil/Fat
+corn_tortilla,Cereal/Crop/Bean
+cornbread,Bakery/Dessert/Snack
+cornmeal,Cereal/Crop/Bean
+cornstarch,Cereal/Crop/Bean
+cottage_cheese,Dairy
+couscous,Dish/End Product
+crab,Seafood
+cracked_black_pepper,Spice
+cranberry,Fruit
+crayfish,Seafood
+cream,Dairy
+cream_cheese,Dairy
+cream_of_mushroom_soup,Dish/End Product
+cream_of_tartar,Dairy
+crushed_pineapple,Fruit
+crushed_red_pepper_flake,Spice
+cucumber,Plant/Vegetable
+cumin,Spice
+cumin_seed,Nut/Seed
+currant,Plant/Vegetable
+curry_leaf,Plant/Vegetable
+curry_powder,Sauce/Powder/Dressing
+cuttlefish,Seafood
+dark_brown_sugar,Sauce/Powder/Dressing
+date,Fruit
+deer,Meat/Animal Product
+diced_tomato,Plant/Vegetable
+dijon_mustard,Sauce/Powder/Dressing
+dill,Plant/Vegetable
+dried_basil,Plant/Vegetable
+dried_cranberry,Fruit
+dried_oregano,Plant/Vegetable
+dried_parsley,Plant/Vegetable
+dried_thyme,Plant/Vegetable
+dry_mustard,Cereal/Crop/Bean
+dry_white_wine,Beverage Alcoholic
+dulce_de_leche,Bakery/Dessert/Snack
+dumpling,Dish/End Product
+egg,Meat/Animal Product
+egg_white,Meat/Animal Product
+egg_yolk,Meat/Animal Product
+eggplant,Plant/Vegetable
+elderberry,Fruit
+endive,Plant/Vegetable
+epazote,Plant/Vegetable
+evaporated_milk,Dairy
+extra_virgin_olive_oil,Essential Oil/Fat
+fennel,Plant/Vegetable
+feta_cheese,Dairy
+fig,Plant/Vegetable
+filbert,Nut/Seed
+fish,Seafood
+fish_sauce,Sauce/Powder/Dressing
+flat_leaf_parsley,Plant/Vegetable
+flour,Cereal/Crop/Bean
+flour_tortilla,Cereal/Crop/Bean
+fresh_basil,Plant/Vegetable
+fresh_basil_leaf,Plant/Vegetable
+fresh_chive,Plant/Vegetable
+fresh_cilantro,Plant/Vegetable
+fresh_dill,Plant/Vegetable
+fresh_ginger,Plant/Vegetable
+fresh_ground_black_pepper,Spice
+fresh_ground_pepper,Spice
+fresh_lemon_juice,Beverage
+fresh_lime_juice,Beverage
+fresh_mushroom,Fungus
+fresh_parsley,Plant/Vegetable
+fresh_parsley_leaf,Plant/Vegetable
+fresh_rosemary,Plant/Vegetable
+fresh_thyme,Plant/Vegetable
+frozen_pea,Cereal/Crop/Bean
+fruit_juice,Beverage
+fruit_preserve,Sauce/Powder/Dressing
+fruit_salad,Fruit
+fudge,Bakery/Dessert/Snack
+garlic,Plant/Vegetable
+garlic_clove,Plant/Vegetable
+garlic_powder,Sauce/Powder/Dressing
+garlic_salt,Sauce/Powder/Dressing
+gelatin,Sauce/Powder/Dressing
+ghee,Essential Oil/Fat
+gin,Beverage Alcoholic
+ginger,Plant/Vegetable
+ginkgo_nut,Nut/Seed
+goat_cheese,Dairy
+gooseberry,Fruit
+graham_cracker_crumb,Bakery/Dessert/Snack
+granny_smith_apple,Fruit
+granulated_sugar,Sauce/Powder/Dressing
+grape,Fruit
+grapefruit,Fruit
+greek_yogurt,Dairy
+green_bean,Cereal/Crop/Bean
+green_bell_pepper,Plant/Vegetable
+green_chilies,Plant/Vegetable
+green_onion,Plant/Vegetable
+green_pepper,Plant/Vegetable
+green_tea,Beverage
+green_zucchini,Plant/Vegetable
+ground_allspice,Spice
+ground_beef,Meat/Animal Product
+ground_black_pepper,Spice
+ground_cinnamon,Spice
+ground_clove,Spice
+ground_coriander,Spice
+ground_cumin,Spice
+ground_ginger,Plant/Vegetable
+ground_nutmeg,Nut/Seed
+grouper,Seafood
+gruyere_cheese,Dairy
+guava,Fruit
+haddock,Seafood
+half_and_half,Dish/End Product
+ham,Meat/Animal Product
+hamburger,Dish/End Product
+hazelnut,Nut/Seed
+heavy_cream,Sauce/Powder/Dressing
+heavy_whipping_cream,Sauce/Powder/Dressing
+honey,Sauce/Powder/Dressing
+hop,Plant/Vegetable
+horseradish,Plant/Vegetable
+hot_dog,Dish/End Product
+hot_pepper_sauce,Sauce/Powder/Dressing
+hot_sauce,Sauce/Powder/Dressing
+hot_water,Beverage
+hummus,Dish/End Product
+ice,ETC
+ice_cream,Bakery/Dessert/Snack
+ice_cream_cone,Bakery/Dessert/Snack
+ice_cube,ETC
+icing,Bakery/Dessert/Snack
+icing_sugar,Sauce/Powder/Dressing
+irish_moss,Seafood
+italian_seasoning,Sauce/Powder/Dressing
+jackfruit,Fruit
+jalapeno,Plant/Vegetable
+jalapeno_pepper,Plant/Vegetable
+jerusalem_artichoke,Plant/Vegetable
+jicama,Cereal/Crop/Bean
+kale,Plant/Vegetable
+kefir,Beverage Alcoholic
+kelp,Seafood
+ketchup,Sauce/Powder/Dressing
+kidney_bean,Cereal/Crop/Bean
+kiwi,Fruit
+kohlrabi,Plant/Vegetable
+kombu,Seafood
+kosher_salt,Sauce/Powder/Dressing
+kumquat,Fruit
+lamb,Meat/Animal Product
+lean_ground_beef,Meat/Animal Product
+leek,Plant/Vegetable
+lemon,Fruit
+lemon_balm,Plant/Vegetable
+lemon_juice,Beverage
+lemon_verbena,Plant/Vegetable
+lemon_zest,Fruit
+lentil,Cereal/Crop/Bean
+lettuce,Plant/Vegetable
+light_brown_sugar,Sauce/Powder/Dressing
+light_corn_syrup,Sauce/Powder/Dressing
+lima_bean,Cereal/Crop/Bean
+lime,Fruit
+lime_juice,Beverage
+lingonberry,Fruit
+lobster,Seafood
+lovage,Plant/Vegetable
+low_fat_milk,Dairy
+low_sodium_chicken_broth,Dish/End Product
+macadamia_nut,Nut/Seed
+macaroni,Cereal/Crop/Bean
+mace,Nut/Seed
+madeira_wine,Beverage Alcoholic
+mandarin_orange,Fruit
+mango,Fruit
+maple_syrup,Sauce/Powder/Dressing
+margarine,Beverage Alcoholic
+marjoram,Plant/Vegetable
+marshmallow,Bakery/Dessert/Snack
+marzipan,Bakery/Dessert/Snack
+mayonnaise,Sauce/Powder/Dressing
+meat,Meat/Animal Product
+meatball,Meat/Animal Product
+meatloaf,Dish/End Product
+melon,Fruit
+meringue,Sauce/Powder/Dressing
+mexican_oregano,Dairy
+milk,Dairy
+millet,Cereal/Crop/Bean
+mint,Bakery/Dessert/Snack
+miso,Sauce/Powder/Dressing
+mixed_nut,Nut/Seed
+molasses,Cereal/Crop/Bean
+monterey_jack_cheese,Dairy
+mozzarella_cheese,Dairy
+mulberry,Fruit
+multigrain_bread,Bakery/Dessert/Snack
+mung_bean,Cereal/Crop/Bean
+mushroom,Fungus
+mustard,Sauce/Powder/Dressing
+mustard_oil,Essential Oil/Fat
+mutton,Meat/Animal Product
+nigella_seed,Nut/Seed
+nut,Nut/Seed
+nutmeg,Nut/Seed
+oat,Cereal/Crop/Bean
+of_fresh_mint,Bakery/Dessert/Snack
+oil,Essential Oil/Fat
+okra,Plant/Vegetable
+olive,Plant/Vegetable
+olive_oil,Essential Oil/Fat
+onion,Plant/Vegetable
+onion_powder,Sauce/Powder/Dressing
+orange,Fruit
+orange_bell_pepper,Plant/Vegetable
+orange_juice,Beverage
+orange_oil,Essential Oil/Fat
+orange_roughy,Seafood
+orange_zest,Fruit
+oregano,Spice
+oyster,Seafood
+oyster_mushroom,Fungus
+pancake,Bakery/Dessert/Snack
+panko_breadcrumb,Bakery/Dessert/Snack
+papaya,Fruit
+paprika,Plant/Vegetable
+parmesan_cheese,Dairy
+parmigiano_reggiano_cheese,Dairy
+parsley,Plant/Vegetable
+parsnip,Plant/Vegetable
+passion_fruit,Fruit
+pasta,Cereal/Crop/Bean
+pate,Dish/End Product
+pawpaw,Plant/Vegetable
+pea,Plant/Vegetable
+peach,Fruit
+peanut,Nut/Seed
+peanut_butter,Sauce/Powder/Dressing
+peanut_oil,Essential Oil/Fat
+pear,Fruit
+pear_brandy,Beverage Alcoholic
+pecan,Nut/Seed
+pectin,ETC
+pepper,Spice
+peppermint,Plant/Vegetable
+persimmon,Fruit
+pheasant,Meat/Animal Product
+philadelphia_cream_cheese,Dairy
+phyllo_dough,Cereal/Crop/Bean
+pie_crust,Cereal/Crop/Bean
+pigeon_pea,Cereal/Crop/Bean
+pine_nut,Nut/Seed
+pineapple,Fruit
+pineapple_juice,Beverage
+pink_salmon,Seafood
+pistachio,Nut/Seed
+pita_bread,Bakery/Dessert/Snack
+plain_flour,Cereal/Crop/Bean
+plain_yogurt,Dairy
+plum,Fruit
+plum_brandy,Beverage Alcoholic
+plum_tomato,Fruit
+plum_wine,Beverage Alcoholic
+pollock,Meat/Animal Product
+pomegranate,Fruit
+popcorn,Bakery/Dessert/Snack
+poppy_seed,Nut/Seed
+pork,Meat/Animal Product
+port_wine,Beverage Alcoholic
+potato,Plant/Vegetable
+potato_bread,Bakery/Dessert/Snack
+potato_chip,Bakery/Dessert/Snack
+powdered_sugar,Sauce/Powder/Dressing
+prawn,Seafood
+prickly_pear,Fruit
+provolone_cheese,Dairy
+pudding,Bakery/Dessert/Snack
+pumpkin,Plant/Vegetable
+pure_vanilla_extract,Sauce/Powder/Dressing
+purslane,Plant/Vegetable
+quail,Meat/Animal Product
+quince,Fruit
+quinoa,Cereal/Crop/Bean
+rabbit,Meat/Animal Product
+radish,Plant/Vegetable
+rainbow_trout,Seafood
+raisin,Fruit
+raisin_bread,Bakery/Dessert/Snack
+rapini,Plant/Vegetable
+raspberry,Fruit
+ravioli,Dish/End Product
+red_bell_pepper,Plant/Vegetable
+red_currant,Fruit
+red_onion,Plant/Vegetable
+red_pepper,Plant/Vegetable
+red_pepper_flake,Spice
+red_potato,Plant/Vegetable
+red_raspberry,Fruit
+red_rice,Cereal/Crop/Bean
+red_wine,Beverage Alcoholic
+red_wine_vinegar,Beverage Alcoholic
+relish,Plant/Vegetable
+rhubarb,Plant/Vegetable
+rice,Cereal/Crop/Bean
+rice_cake,Bakery/Dessert/Snack
+rice_vinegar,Sauce/Powder/Dressing
+ricotta_cheese,Dairy
+rolled_oat,Cereal/Crop/Bean
+romaine_lettuce,Plant/Vegetable
+romano_cheese,Dairy
+roquefort_cheese,Dairy
+rose,Flower
+rose_wine,Beverage Alcoholic
+rosemary,Flower
+rum,Beverage Alcoholic
+russet_potato,Plant/Vegetable
+rutabaga,Dairy
+rye_bread,Bakery/Dessert/Snack
+saffron,Cereal/Crop/Bean
+sage,Plant/Vegetable
+sake,Beverage Alcoholic
+salad_dressing,Sauce/Powder/Dressing
+salmon,Seafood
+salmon_fillet,Seafood
+salsa,Sauce/Powder/Dressing
+salt,Sauce/Powder/Dressing
+salt_&_freshly_ground_black_pepper,Spice
+salt_&_pepper,Spice
+salt_and_black_pepper,Sauce/Powder/Dressing
+salt_and_pepper,Sauce/Powder/Dressing
+saskatoon_berry,Fruit
+sausage,Meat/Animal Product
+scallion,Plant/Vegetable
+scallop,Seafood
+scotch_whisky,Beverage Alcoholic
+sea_salt,Sauce/Powder/Dressing
+seasoning_salt,Sauce/Powder/Dressing
+semi_sweet_chocolate_chip,Bakery/Dessert/Snack
+semisweet_chocolate,Bakery/Dessert/Snack
+semolina,Plant/Vegetable
+sesame,Nut/Seed
+sesame_oil,Essential Oil/Fat
+sesame_seed,Nut/Seed
+shallot,Plant/Vegetable
+sharp_cheddar_cheese,Dairy
+shortening,Dairy
+shredded_cheddar_cheese,Dairy
+shrimp,Seafood
+skim_milk,Dairy
+sliced_almond,Nut/Seed
+sliced_mushroom,Fungus
+slivered_almond,Nut/Seed
+smelt,Seafood
+snail,Seafood
+sockeye_salmon,Seafood
+sorghum,Cereal/Crop/Bean
+sorrel,Plant/Vegetable
+soup,Dish/End Product
+sour_cherry,Plant/Vegetable
+sour_cream,Dairy
+soy_sauce,Sauce/Powder/Dressing
+soy_yogurt,Dairy
+soybean,Cereal/Crop/Bean
+soybean_oil,Essential Oil/Fat
+spaghetti,Cereal/Crop/Bean
+sparkling_wine,Beverage Alcoholic
+spearmint,Sauce/Powder/Dressing
+spelt,Cereal/Crop/Bean
+spinach,Plant/Vegetable
+spirulina,Plant/Vegetable
+squab,Meat/Animal Product
+squid,Seafood
+squirrel,Meat/Animal Product
+star_anise,Plant/Vegetable
+star_fruit,Fruit
+strawberry,Plant/Vegetable
+strawberry_jam,Sauce/Powder/Dressing
+striped_bass,Seafood
+sugar,Sauce/Powder/Dressing
+sugar_substitute,Sauce/Powder/Dressing
+summer_savory,Plant/Vegetable
+swede,Plant/Vegetable
+sweet_basil,Plant/Vegetable
+sweet_cherry,Fruit
+sweet_marjoram,Plant/Vegetable
+sweet_onion,Plant/Vegetable
+sweet_potato,Plant/Vegetable
+sweetcorn,Cereal/Crop/Bean
+sweetened_condensed_milk,Beverage
+swiss_cheese,Dairy
+swordfish,Seafood
+syrup,Sauce/Powder/Dressing
+tabasco_sauce,Sauce/Powder/Dressing
+tamale,Cereal/Crop/Bean
+tangerine,Plant/Vegetable
+tarragon,Plant/Vegetable
+tea,Beverage
+teff,Plant/Vegetable
+thyme,Plant/Vegetable
+tofu,Dish/End Product
+tomato,Plant/Vegetable
+tomato_paste,Sauce/Powder/Dressing
+tomato_sauce,Sauce/Powder/Dressing
+tortilla,Cereal/Crop/Bean
+tortilla_chip,Cereal/Crop/Bean
+tostada,Cereal/Crop/Bean
+trail_mix,Dish/End Product
+truffle,Fungus
+turbot,Seafood
+turkey,Meat/Animal Product
+turmeric,Plant/Vegetable
+turnip,Plant/Vegetable
+unsalted_butter,Dairy
+unsweetened_cocoa_powder,Sauce/Powder/Dressing
+vanilla,Plant/Vegetable
+vanilla_extract,Plant/Vegetable
+vanilla_ice_cream,Dairy
+vegetable_broth,Plant/Vegetable
+vegetable_juice,Beverage
+vegetable_oil,Essential Oil/Fat
+vegetable_stock,Plant/Vegetable
+vermouth,Beverage Alcoholic
+vinegar,Sauce/Powder/Dressing
+vodka,Beverage Alcoholic
+waffle,Bakery/Dessert/Snack
+walleye,Seafood
+walnut,Nut/Seed
+warm_water,Beverage
+wasabi,Sauce/Powder/Dressing
+water,Beverage
+water_chestnut,Nut/Seed
+watercress,Plant/Vegetable
+wheat,Cereal/Crop/Bean
+whey,Dairy
+whipped_cream,Dairy
+whipping_cream,Dairy
+white_bread,Bakery/Dessert/Snack
+white_cabbage,Plant/Vegetable
+white_onion,Plant/Vegetable
+white_pepper,Plant/Vegetable
+white_sugar,Spice
+white_vinegar,Sauce/Powder/Dressing
+white_wine,Beverage Alcoholic
+white_wine_vinegar,Sauce/Powder/Dressing
+whole_milk,Dairy
+whole_wheat_flour,Cereal/Crop/Bean
+wild_rice,Cereal/Crop/Bean
+wine,Beverage Alcoholic
+winter_savory,Plant/Vegetable
+winter_squash,Fruit
+wonton_wrapper,Cereal/Crop/Bean
+worcestershire_sauce,Sauce/Powder/Dressing
+yam,Plant/Vegetable
+yellow_bell_pepper,Plant/Vegetable
+yellow_onion,Plant/Vegetable
+yellow_zucchini,Plant/Vegetable
+yogurt,Dairy
+zucchini,Plant/Vegetable
