@@ -9,9 +9,7 @@ import pickle
     v_embedding: Embedding for neighbor words.
 """
 
-
 class SkipGramModel(nn.Module):
-
     def __init__(self, emb_size, emb_dimension):
         super(SkipGramModel, self).__init__()
         self.emb_size = emb_size

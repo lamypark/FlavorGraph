@@ -1,6 +1,37 @@
 import pandas as pd
 import networkx as nx
+from tqdm import tqdm, trange
 from texttable import Texttable
+
+def graph_reader(input_nodes, input_edges):
+    """
+    Function to read the graph from the path.
+    :param path: Path to the edge list.
+    :return graph: NetworkX object returned.
+    """
+
+    print("\nCreating Graphs...")
+    graph = nx.Graph()
+
+    print("Nodes Loaded...%s..." % format(input_nodes))
+    df_nodes = pd.read_csv(input_nodes)
+    for index, row in tqdm(df_nodes.iterrows(), total=len(df_nodes)):
+        _, node_id, name, _id, node_type, is_hub = row.values.tolist()
+        graph.add_node(node_id, name=name, id=_id, type=node_type, is_hub=is_hub)
+
+    print("Edges Loaded...%s..." % format(input_edges))
+    df_edges = pd.read_csv(input_edges)
+    for index, row in tqdm(df_edges.iterrows(), total=len(df_edges)):
+        #print(row.values.tolist())
+        _, id_1, id_2, score, edge_type = row.values.tolist()
+        graph.add_edge(id_1, id_2, weight=score, type=edge_type)
+    graph.remove_edges_from(graph.selfloop_edges())
+
+    print("# of nodes in graph: %d" % nx.number_of_nodes(graph))
+    print("# of edges in graph: %d" % nx.number_of_edges(graph))
+    print("isolated nodes: %s" % list(nx.isolates(graph)))
+
+    return graph
 
 def tab_printer(args):
     """
@@ -12,38 +43,3 @@ def tab_printer(args):
     t = Texttable()
     t.add_rows([["Parameter", "Value"]] +  [[k.replace("_"," ").capitalize(),args[k]] for k in keys])
     print(t.draw())
-
-def graph_reader(node2ingr, edge_id2score):
-    """
-    Function to read the graph from the path.
-    :param path: Path to the edge list.
-    :return graph: NetworkX object returned.
-    """
-    graph = nx.Graph()
-    nodes = sorted(list(node2ingr.keys()))
-    graph.add_nodes_from(nodes)
-    for edge in edge_id2score:
-        graph.add_edge(edge[0], edge[1], weight=edge_id2score[edge])
-    graph.remove_edges_from(graph.selfloop_edges())
-
-    for node in nodes[:10]:
-        ego_net_minus_ego = graph.subgraph(graph.neighbors(node))
-        if len(list(nx.connected_components(ego_net_minus_ego))) > 1:
-            print(node, node2ingr[node])
-
-            print(list(graph.neighbors(node)))
-            print(ego_net_minus_ego.edges)
-
-            for i in nx.connected_components(ego_net_minus_ego):
-                print(i)
-
-        print()
-
-
-
-    print("# nodes in graph: %d" % nx.number_of_nodes(graph))
-    print("# edges in graph: %d" % nx.number_of_edges(graph))
-
-    #print(nx.get_edge_attributes(graph, 'weight')[(101, 214)])
-
-    return graph

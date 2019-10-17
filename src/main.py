@@ -1,8 +1,11 @@
 import torch
 from parser import parameter_parser
-from splitter import SplitterTrainer
 from utils import tab_printer, graph_reader
-from preprocessor import data_reader_small
+
+from metapath2vec import Metapath2Vec
+
+#from splitter import SplitterTrainer
+#from preprocessor import data_reader_small
 
 def main():
     """
@@ -14,8 +17,21 @@ def main():
     torch.manual_seed(args.seed)
     tab_printer(args)
 
-    #node2ingr, edge_id2score = data_reader_small(args)
-    #graph = graph_reader(node2ingr, edge_id2score)
+    """
+    1. read graph
+    """
+    graph = graph_reader(args.input_nodes, args.input_edges)
+
+    """
+    2. Simple Node2vec with DeepWalker - Ingredient-Ingredient
+    Need to implement
+    """
+
+    """
+    3. Metapath2vec with MetaPathWalker - Ingredient-Ingredient / Ingredient-Food-like Compound / Ingredient-Drug-like Compound
+    """
+    m2v = Metapath2Vec(args, graph)
+    #m2v.train()
 
     #trainer = SplitterTrainer(graph, args, node2ingr)
     #trainer.walk()
