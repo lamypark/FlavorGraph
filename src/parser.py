@@ -13,7 +13,14 @@ def parameter_parser():
     parser.add_argument('--input_edges',
                         default="./input/edges_191016.csv",
                         type=str, help="input_file")
-    parser.add_argument('--output_file', type=str, help='output_file')
+    parser.add_argument('--input_path_metapaths',
+                        default="./input/metapaths/",
+                        type=str, help="input_path_metapaths")
+
+    parser.add_argument('--output_path',
+                        default="./output/",
+                        type=str, help="output_path")
+
 
     # Skip-Gram
     parser.add_argument('--dim', default=128, type=int, help="embedding dimensions")

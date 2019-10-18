@@ -42,7 +42,7 @@ class MetaPathWalker(object):
         else:
             return None
 
-    def create_metapath_walks(self, num_walks, meta_paths):
+    def create_metapath_walks(self, args, num_walks, meta_paths):
         print("Creating Metapath Walks...")
         walks = []
         for node in tqdm(self.graph.nodes()):
@@ -56,7 +56,8 @@ class MetaPathWalker(object):
         walks = list(walks for walks,_ in itertools.groupby(walks))
         print("Number of MetaPath Walks Created: {}".format(len(walks)))
 
-        with open("./input/metapaths/metapaths_{}_{}.txt".format(num_walks, len(meta_paths)), "w") as fw:
+        file = "{}metapaths_{}-meta_{}-nodes_{}-paths_{}-walks_{}-dim.txt".format(args.input_path_metapaths, args.make_meta, args.len_metapaths, args.num_metapaths, args.num_walks, args.dim)
+        with open(file, "w") as fw:
             for walk in walks:
                 for node in walk:
                     node_info = self.graph.nodes[node]

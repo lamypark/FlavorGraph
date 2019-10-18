@@ -15,8 +15,8 @@ class Metapath2Vec:
         metapathwalker = MetaPathWalker(args, graph)
         self.metapaths = metapathwalker.generate_metapaths(args)
         if not args.skip_meta:
-            metapathwalker.create_metapath_walks(args.num_walks, self.metapaths)
-        self.inputFileName = "./input/metapaths/metapaths_{}_{}.txt".format(args.num_walks, len(self.metapaths))
+            metapathwalker.create_metapath_walks(args, args.num_walks, self.metapaths)
+        self.inputFileName = "{}metapaths_{}-meta_{}-nodes_{}-paths_{}-walks_{}-dim.txt".format(args.input_path_metapaths, args.make_meta, args.len_metapaths, args.num_metapaths, args.num_walks, args.dim)
 
         # 2. read data
         self.data = DataReader(args.min_count, args.care_type, args.num_walks, self.metapaths, self.inputFileName)
@@ -26,8 +26,7 @@ class Metapath2Vec:
         self.dataloader = DataLoader(dataset, batch_size=args.batch_size,
                                      shuffle=True, num_workers=args.num_workers, collate_fn=dataset.collate)
 
-
-        self.output_file_name = "./output/flavornet_embeddings_{}-meta_{}-nodes_{}-paths_{}-walks_{}-dim.pickle".format(args.make_meta, args.len_metapaths, args.num_metapaths, args.num_walks, args.dim)
+        self.output_file_name = "{}embedding_{}-meta_{}-nodes_{}-paths_{}-walks_{}-dim.pickle".format(args.output_path, args.make_meta, args.len_metapaths, args.num_metapaths, args.num_walks, args.dim)
         self.emb_size = len(self.data.word2id)
         self.emb_dimension = args.dim
         self.batch_size = args.batch_size
