@@ -5,7 +5,7 @@ src/ipynb
 input/Im2recipe/
 input/FlavorDB/
 input/HyperFoods/
-input/metapaths/
+input/paths/
 
 # output files
 output/*.html
