@@ -1,9 +1,11 @@
+# unwanted source codes
+src/ipynb
+
 # input files
 input/Im2recipe/
 input/FlavorDB/
 input/HyperFoods/
 input/metapaths/
-input/*.pickle
 
 # output files
 output/*.html
@@ -11,7 +13,6 @@ output/*.pickle
 
 # ipython notebook files
 *.ipynb
-
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
