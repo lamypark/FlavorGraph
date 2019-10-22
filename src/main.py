@@ -1,8 +1,9 @@
 import torch
 from parser import parameter_parser
 from utils import tab_printer, graph_reader
+from dataloader import DataReader, DatasetLoader
 
-from metapath2vec import Metapath2Vec
+from graph2vec import Metapath2Vec, Node2Vec
 from plotter import plot_embedding
 
 #from splitter import SplitterTrainer
@@ -19,31 +20,32 @@ def main():
     tab_printer(args)
 
     """
-    1. read graph
+    1. read graph and load as torch dataset
     """
-    graph = graph_reader(args.input_nodes, args.input_edges)
-
+    graph, graph_ingr_only = graph_reader(args.input_nodes, args.input_edges)
     """
     2. Simple Node2vec with DeepWalker - Ingredient-Ingredient
-    Need to implement
+
+    self.base_walker = DeepWalker(self.graph, self.args)
+    print("\nDoing base random walks.\n")
+    self.base_walker.create_features()
+    print("\nLearning the base model.\n")
+    self.base_node_embedding = self.base_walker.learn_base_embedding()
+    print("\nDeleting the base walker.\n")
+    del self.base_walker
+
     """
+    #node2vec = Node2Vec(args, graph_ingr_only)
+    #node2vec.train()
+    #plot_embedding(args, graph)
 
     """
     3. Metapath2vec with MetaPathWalker - Ingredient-Ingredient / Ingredient-Food-like Compound / Ingredient-Drug-like Compound
     """
-    m2v = Metapath2Vec(args, graph)
-    m2v.train()
-    plot_embedding(args, graph)
+    metapath2vec = Metapath2Vec(args, graph)
+    metapath2vec.train()
 
-    #trainer = SplitterTrainer(graph, args, node2ingr)
-    #trainer.walk()
-    #trainer.split()
-
-    #trainer.base_model_fit(self):
-    #trainer.create_split()
-    #trainer.fit()
-    #trainer.save_embedding()
-    #trainer.save_persona_graph_mapping()
+    #plot_embedding(args, graph)
 
 if __name__ == "__main__":
     main()

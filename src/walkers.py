@@ -22,16 +22,16 @@ class MetaPathWalker(object):
         self.graph = graph
 
     def generate_metapaths(self, args):
-        if args.make_meta == 'random':
+        if args.which_metapath == 'random':
             return [list(np.random.choice(['no_hub+ingredient', 'food_comp', 'hub+ingredient'], args.len_metapaths, p=[0.3, 0.25, 0.45])) for _ in range(args.num_metapaths)]
-        elif args.make_meta == 'starthub':
+        elif args.which_metapath == 'starthub':
             return_list = []
             for _ in range(args.num_metapaths):
                 small_list = ['hub+ingredient']
                 remain_list = list(np.random.choice(['no_hub+ingredient', 'no_hub+food_comp', 'hub+ingredient'], args.len_metapaths-1, p=[0.3, 0.25, 0.45]))
                 return_list.append(small_list + remain_list)
             return return_list
-        elif args.make_meta == 'hxxhxxh':
+        elif args.which_metapath == 'hxxhxxh':
             return_list = []
             for _ in range(args.num_metapaths):
                 small_list = ['hub+ingredient']
@@ -53,10 +53,11 @@ class MetaPathWalker(object):
                     if walk is not None:
                         walks.append(walk)
 
+        #print("Number of MetaPath Walks Created: {}".format(len(walks)))
         walks = list(walks for walks,_ in itertools.groupby(walks))
         print("Number of MetaPath Walks Created: {}".format(len(walks)))
 
-        file = "{}metapaths_{}-meta_{}-nodes_{}-paths_{}-walks_{}-dim.txt".format(args.input_path_metapaths, args.make_meta, args.len_metapaths, args.num_metapaths, args.num_walks, args.dim)
+        file = "{}metapaths_{}-meta_{}-nodes_{}-paths_{}-walks_{}-dim.txt".format(args.input_path_metapaths, args.which_metapath, args.len_metapaths, args.num_metapaths, args.num_walks, args.dim)
         with open(file, "w") as fw:
             for walk in walks:
                 for node in walk:
@@ -92,10 +93,6 @@ class MetaPathWalker(object):
                 filtered.remove(n)
         return filtered
 
-
-
-
-
 class DeepWalker(object):
     """
     DeepWalk node embedding learner object.
@@ -103,13 +100,13 @@ class DeepWalker(object):
     Paper: https://arxiv.org/abs/1403.6652
     Video: https://www.youtube.com/watch?v=aZNtHJwfIVg
     """
-    def __init__(self, graph, args):
+    def __init__(self, args, graph):
         """
-        :param graph: NetworkX graph.
         :param args: Arguments object.
+        :param graph: NetworkX graph.
         """
-        self.graph = graph
         self.args = args
+        self.graph = graph
 
     def small_walk(self, start_node):
         """
@@ -131,7 +128,7 @@ class DeepWalker(object):
         :return walk: Truncated random walk list of nodes with fixed maximal length.
         """
         walk = [start_node]
-        while len(walk) < self.args.walk_length:
+        while len(walk) < self.args.len_deepwalkpaths:
             current_node = walk[-1]
             neighbors_of_end_node = list(nx.neighbors(self.graph,current_node))
             if len(neighbors_of_end_node) == 0:
@@ -140,22 +137,27 @@ class DeepWalker(object):
             walk += [next_node]
         return walk
 
-    def create_features(self):
+    def create_deepwalk_paths(self):
         """
         Creating random walks from each node.
         """
-        self.paths = []
+        walks = []
+        ingrs = []
         for node in tqdm(self.graph.nodes()):
-            for k in range(self.args.number_of_walks):
+            for k in range(self.args.num_walks):
                 walk = self.weighted_small_walk(node)
-                self.paths.append(walk)
+                walks.append(walk)
 
-    def learn_base_embedding(self):
-        """
-        Learning an embedding of nodes in the base graph.
-        :return self.embedding: Embedding of nodes in the latent space.
-        """
-        self.paths = [[str(node) for node in walk] for walk in self.paths]
-        model = Word2Vec(self.paths, size = self.args.dimensions, window = self.args.window_size, min_count = 1, sg = 1, workers = self.args.workers, iter = 1)
-        self.embedding = np.array([list(model[str(n)]) for n in self.graph.nodes()])
-        return self.embedding
+        print(len(ingrs))
+
+        walks = list(walks for walks,_ in itertools.groupby(walks))
+        print("Number of MetaPath Walks Created: {}".format(len(walks)))
+
+        file = "{}deepwalkpaths_{}-whichmeta_{}-nodes_{}-paths_{}-walks_{}-dim.txt".format(self.args.input_path_deepwalkpaths, self.args.which_deepwalkpath, self.args.len_deepwalkpaths, self.args.num_deepwalkpaths, self.args.num_walks, self.args.dim)
+
+        with open(file, "w") as fw:
+            for walk in walks:
+                for node in walk:
+                    node_info = self.graph.nodes[node]
+                    fw.write("{} ".format(node))
+                fw.write("\n")

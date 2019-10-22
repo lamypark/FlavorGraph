@@ -12,12 +12,15 @@ def graph_reader(input_nodes, input_edges):
 
     print("\nCreating Graphs...")
     graph = nx.Graph()
+    graph_ingr_only = nx.Graph()
 
     print("Nodes Loaded...%s..." % format(input_nodes))
     df_nodes = pd.read_csv(input_nodes)
     for index, row in tqdm(df_nodes.iterrows(), total=len(df_nodes)):
         _, node_id, name, _id, node_type, is_hub = row.values.tolist()
         graph.add_node(node_id, name=name, id=_id, type=node_type, is_hub=is_hub)
+        if node_type == 'ingredient':
+            graph_ingr_only.add_node(node_id, name=name, id=_id, type=node_type, is_hub=is_hub)
 
     print("Edges Loaded...%s..." % format(input_edges))
     df_edges = pd.read_csv(input_edges)
@@ -25,13 +28,18 @@ def graph_reader(input_nodes, input_edges):
         #print(row.values.tolist())
         _, id_1, id_2, score, edge_type = row.values.tolist()
         graph.add_edge(id_1, id_2, weight=score, type=edge_type)
+        if edge_type == 'ingr-ingr':
+            graph_ingr_only.add_edge(id_1, id_2, weight=score, type=edge_type)
+
     graph.remove_edges_from(graph.selfloop_edges())
+    graph_ingr_only.remove_edges_from(graph.selfloop_edges())
 
     print("# of nodes in graph: %d" % nx.number_of_nodes(graph))
     print("# of edges in graph: %d" % nx.number_of_edges(graph))
-    print("isolated nodes: %s" % list(nx.isolates(graph)))
+    print("# of nodes in graph: %d" % nx.number_of_nodes(graph_ingr_only))
+    print("# of edges in graph: %d" % nx.number_of_edges(graph_ingr_only))
 
-    return graph
+    return graph, graph_ingr_only
 
 def tab_printer(args):
     """

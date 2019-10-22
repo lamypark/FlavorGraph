@@ -27,7 +27,9 @@ def plot_embedding(args, graph):
         node2ingr[node] = node_info['name']
         ingr2type[node_info['name']] = node_info['type']
 
-    file = "{}embedding_{}-meta_{}-nodes_{}-paths_{}-walks_{}-dim.pickle".format(args.output_path, args.make_meta, args.len_metapaths, args.num_metapaths, args.num_walks, args.dim)
+    #file = "{}embedding_deepwalkpath_{}-whichmeta_{}-nodes_{}-paths_{}-walks_{}-dim.pickle".format(args.output_path, args.which_deepwalkpath, args.len_deepwalkpaths, args.num_deepwalkpaths, args.num_walks, args.dim)
+    file = "{}embedding_metapath_{}-whichmeta_{}-nodes_{}-paths_{}-walks_{}-dim.pickle".format(args.output_path, args.which_metapath, args.len_metapaths, args.num_metapaths, args.num_walks, args.dim)
+
     with open(file, "rb") as pickle_file:
         vectors = pickle.load(pickle_file)
 
