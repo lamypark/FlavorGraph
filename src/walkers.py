@@ -23,20 +23,20 @@ class MetaPathWalker(object):
 
     def generate_metapaths(self, args):
         if args.which_metapath == 'random':
-            return [list(np.random.choice(['no_hub+ingredient', 'food_comp', 'hub+ingredient'], args.len_metapaths, p=[0.3, 0.25, 0.45])) for _ in range(args.num_metapaths)]
+            return [list(np.random.choice(['no_hub+ingredient', 'food_comp', 'hub+ingredient'], args.len_metapath, p=[0.3, 0.25, 0.45])) for _ in range(args.num_metapath)]
         elif args.which_metapath == 'starthub':
             return_list = []
-            for _ in range(args.num_metapaths):
+            for _ in range(args.num_metapath):
                 small_list = ['hub+ingredient']
-                remain_list = list(np.random.choice(['no_hub+ingredient', 'no_hub+food_comp', 'hub+ingredient'], args.len_metapaths-1, p=[0.3, 0.25, 0.45]))
+                remain_list = list(np.random.choice(['no_hub+ingredient', 'no_hub+food_comp', 'hub+ingredient'], args.len_metapath-1, p=[0.3, 0.25, 0.45]))
                 return_list.append(small_list + remain_list)
             return return_list
         elif args.which_metapath == 'hxxhxxh':
             return_list = []
-            for _ in range(args.num_metapaths):
+            for _ in range(args.num_metapath):
                 small_list = ['hub+ingredient']
-                remain_list1 = list(np.random.choice(['no_hub+ingredient', 'food_comp', 'hub+ingredient'], int(args.len_metapaths/2), p=[0.4, 0.4, 0.2]))
-                remain_list2 = list(np.random.choice(['no_hub+ingredient', 'food_comp', 'hub+ingredient'], int(args.len_metapaths/2), p=[0.4, 0.4, 0.2]))
+                remain_list1 = list(np.random.choice(['no_hub+ingredient', 'food_comp', 'hub+ingredient'], int(args.len_metapath/2), p=[0.4, 0.4, 0.2]))
+                remain_list2 = list(np.random.choice(['no_hub+ingredient', 'food_comp', 'hub+ingredient'], int(args.len_metapath/2), p=[0.4, 0.4, 0.2]))
                 return_list.append(small_list + remain_list1 + small_list + remain_list2 + small_list)
             return return_list
         else:
@@ -57,7 +57,7 @@ class MetaPathWalker(object):
         walks = list(walks for walks,_ in itertools.groupby(walks))
         print("Number of MetaPath Walks Created: {}".format(len(walks)))
 
-        file = "{}metapaths_{}-meta_{}-nodes_{}-paths_{}-walks_{}-dim.txt".format(args.input_path_metapaths, args.which_metapath, args.len_metapaths, args.num_metapaths, args.num_walks, args.dim)
+        file = "{}metapath_{}-whichmeta_{}-num_walks_{}-len_walk_{}-num_metapath_{}-dim.pickle".format(args.output_path, args.which_metapath, args.num_walks_metapath, args.len_metapath, args.num_metapath, args.dim)
         with open(file, "w") as fw:
             for walk in walks:
                 for node in walk:
@@ -115,7 +115,7 @@ class DeepWalker(object):
         :return walk: Truncated random walk list of nodes with fixed maximal length.
         """
         walk = [start_node]
-        while len(walk) < self.args.walk_length:
+        while len(walk) < self.args.len_deepwalk:
             if len(list(nx.neighbors(self.graph,walk[-1]))) == 0:
                 break
             walk = walk + [random.sample(list(nx.neighbors(self.graph,walk[-1])),1)[0]]
@@ -128,7 +128,7 @@ class DeepWalker(object):
         :return walk: Truncated random walk list of nodes with fixed maximal length.
         """
         walk = [start_node]
-        while len(walk) < self.args.len_deepwalkpaths:
+        while len(walk) < self.args.len_deepwalk:
             current_node = walk[-1]
             neighbors_of_end_node = list(nx.neighbors(self.graph,current_node))
             if len(neighbors_of_end_node) == 0:
@@ -144,16 +144,16 @@ class DeepWalker(object):
         walks = []
         ingrs = []
         for node in tqdm(self.graph.nodes()):
-            for k in range(self.args.num_walks):
+            for k in range(self.args.num_walks_deepwalk):
                 walk = self.weighted_small_walk(node)
                 walks.append(walk)
 
         print(len(ingrs))
 
         walks = list(walks for walks,_ in itertools.groupby(walks))
-        print("Number of MetaPath Walks Created: {}".format(len(walks)))
+        print("Number of Deepwalk Walks Created: {}".format(len(walks)))
 
-        file = "{}deepwalkpaths_{}-whichmeta_{}-nodes_{}-paths_{}-walks_{}-dim.txt".format(self.args.input_path_deepwalkpaths, self.args.which_deepwalkpath, self.args.len_deepwalkpaths, self.args.num_deepwalkpaths, self.args.num_walks, self.args.dim)
+        file = "{}deepwalk_{}-whichmeta_{}-num_walks_{}-len_walk_{}-dim.txt".format(self.args.input_path_deepwalkpaths, self.args.which_deepwalk, self.args.num_walks_deepwalk, self.args.len_deepwalk, self.args.dim)
 
         with open(file, "w") as fw:
             for walk in walks:

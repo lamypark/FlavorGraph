@@ -37,15 +37,14 @@ def main():
     """
     #node2vec = Node2Vec(args, graph_ingr_only)
     #node2vec.train()
-    #plot_embedding(args, graph)
+    #plot_embedding(args, graph_ingr_only, "deepwalk")
 
     """
     3. Metapath2vec with MetaPathWalker - Ingredient-Ingredient / Ingredient-Food-like Compound / Ingredient-Drug-like Compound
     """
     metapath2vec = Metapath2Vec(args, graph)
     metapath2vec.train()
-
-    #plot_embedding(args, graph)
+    plot_embedding(args, graph, "metapath")
 
 if __name__ == "__main__":
     main()

@@ -34,8 +34,11 @@ def graph_reader(input_nodes, input_edges):
     graph.remove_edges_from(graph.selfloop_edges())
     graph_ingr_only.remove_edges_from(graph.selfloop_edges())
 
+    print("The whole graph - ingredients, food-like compounds, drug-like compounds")
     print("# of nodes in graph: %d" % nx.number_of_nodes(graph))
     print("# of edges in graph: %d" % nx.number_of_edges(graph))
+
+    print("The small graph - ingredients only")
     print("# of nodes in graph: %d" % nx.number_of_nodes(graph_ingr_only))
     print("# of edges in graph: %d" % nx.number_of_edges(graph_ingr_only))
 

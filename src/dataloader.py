@@ -7,7 +7,7 @@ from torch.utils.data import Dataset
 
 class DataReader:
     NEGATIVE_TABLE_SIZE = 1e8
-    def __init__(self, min_count, care_type, num_walks, inputFileName):
+    def __init__(self, min_count, care_type, inputFileName):
         self.negatives = []
         self.discards = []
         self.negpos = 0
@@ -34,7 +34,7 @@ class DataReader:
                         self.token_count += 1
                         word_frequency[word] = word_frequency.get(word, 0) + 1
 
-                        if self.token_count % 10000 == 0:
+                        if self.token_count % 100000 == 0:
                             print("Read " + str(int(self.token_count)) + " words.")
 
         wid = 0

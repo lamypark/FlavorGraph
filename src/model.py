@@ -10,12 +10,20 @@ import pickle
 """
 
 class SkipGramModel(nn.Module):
-    def __init__(self, emb_size, emb_dimension):
+    def __init__(self, emb_size, emb_dimension, pretrained_weights=None, is_metapath=False):
         super(SkipGramModel, self).__init__()
-        self.emb_size = emb_size
-        self.emb_dimension = emb_dimension
-        self.u_embeddings = nn.Embedding(emb_size, emb_dimension, sparse=True)
-        self.v_embeddings = nn.Embedding(emb_size, emb_dimension, sparse=True)
+        self.emb_size = emb_size                # row / 1825
+        self.emb_dimension = emb_dimension      # column / 128
+        self.weights = pretrained_weights
+
+        if is_metapath:
+            self.weights = torch.FloatTensor(self.weights)
+            self.u_embeddings = nn.Embedding.from_pretrained(self.weights)
+            self.v_embeddings = nn.Embedding.from_pretrained(self.weights)
+
+        else:
+            self.u_embeddings = nn.Embedding(emb_size, emb_dimension, sparse=True)
+            self.v_embeddings = nn.Embedding(emb_size, emb_dimension, sparse=True)
 
         initrange = 1.0 / self.emb_dimension
         init.uniform_(self.u_embeddings.weight.data, -initrange, initrange)
