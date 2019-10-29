@@ -18,7 +18,7 @@ class Metapath2Vec:
         self.metapaths = walker.generate_metapaths(args)
         if not args.skip_paths:
             walker.create_metapath_walks(args, args.num_walks_metapath, self.metapaths)
-        self.inputFileName = "{}metapath_{}-whichmeta_{}-num_walks_{}-len_walk_{}-num_metapath_{}-dim.pickle".format(args.input_path_metapaths, args.which_metapath, args.num_walks_metapath, args.len_metapath, args.num_metapath, args.dim)
+        self.inputFileName = "{}metapath_{}-whichmeta_{}-num_walks_{}-len_walk_{}-num_metapath_{}-dim.txt".format(args.input_path_metapaths, args.which_metapath, args.num_walks_metapath, args.len_metapath, args.num_metapath, args.dim)
 
         # 2. read data
         self.data = DataReader(args.min_count, args.care_type, self.inputFileName)
@@ -31,24 +31,22 @@ class Metapath2Vec:
                                      shuffle=True, num_workers=args.num_workers, collate_fn=dataset.collate)
 
         # 5. load pre-trained node2vec for ingredients
-        if not args.use_pretrained:
-            print("use_pretrained")
-            self.pretrained_file_name = "{}embedding_deepwalk_{}-whichmeta_{}-num_walks_{}-len_walk_{}-dim.pickle".format(args.output_path, args.which_deepwalk, args.num_walks_deepwalk, args.len_deepwalk, args.dim)
-            with open(self.pretrained_file_name, "rb") as pickle_file:
-                vectors = pickle.load(pickle_file)
-
-            self.pretrained_weights = []
-            for wid, w in self.data.id2word.items():
-                if w in vectors:
-                    vector = np.array(vectors[w])
-                    print("1", np.mean(vector))
-                else:
-                    vector = np.array(torch.randn(args.dim))
-                    print("2", np.mean(vector))
-                self.pretrained_weights.append(vector)
-
-            self.pretrained_weights = np.array(self.pretrained_weights)
-            #print(self.pretrained_weights)
+        # if not args.use_pretrained:
+        #     print("use_pretrained")
+        #     self.pretrained_file_name = "{}embedding_deepwalk_{}-whichmeta_{}-num_walks_{}-len_walk_{}-dim.pickle".format(args.output_path, args.which_deepwalk, args.num_walks_deepwalk, args.len_deepwalk, args.dim)
+        #     with open(self.pretrained_file_name, "rb") as pickle_file:
+        #         vectors = pickle.load(pickle_file)
+        #
+        #     self.pretrained_weights = []
+        #     for wid, w in self.data.id2word.items():
+        #         if w in vectors:
+        #             vector = np.array(vectors[w])
+        #         else:
+        #             vector = np.array(torch.randn(args.dim))
+        #         self.pretrained_weights.append(vector)
+        #
+        #     self.pretrained_weights = np.array(self.pretrained_weights)
+        #     #print(self.pretrained_weights)"
 
         self.output_file_name = "{}embedding_metapath_{}-whichmeta_{}-num_walks_{}-len_walk_{}-num_metapath_{}-dim.pickle".format(args.output_path, args.which_metapath, args.num_walks_metapath, args.len_metapath, args.num_metapath, args.dim)
         self.emb_size = len(self.data.word2id)
@@ -56,7 +54,7 @@ class Metapath2Vec:
         self.batch_size = args.batch_size
         self.iterations = args.iterations
         self.initial_lr = args.initial_lr
-        self.skip_gram_model = SkipGramModel(self.emb_size, self.emb_dimension, pretrained_weights=self.pretrained_weights, is_metapath=True)
+        self.skip_gram_model = SkipGramModel(self.emb_size, self.emb_dimension, pretrained_weights=None, is_metapath=False)
 
         self.use_cuda = torch.cuda.is_available()
         self.device = torch.device("cuda" if self.use_cuda else "cpu")
@@ -79,7 +77,6 @@ class Metapath2Vec:
                     scheduler.step()
                     optimizer.zero_grad()
                     loss = self.skip_gram_model.forward(pos_u, pos_v, neg_v)
-                    loss = Variable(loss, requires_grad = True)
                     loss.backward()
                     optimizer.step()
                     running_loss = running_loss * 0.9 + loss.item() * 0.1

@@ -22,23 +22,45 @@ class MetaPathWalker(object):
         self.graph = graph
 
     def generate_metapaths(self, args):
+        """
+        generate all possible metapath
+        """
         if args.which_metapath == 'random':
             return [list(np.random.choice(['no_hub+ingredient', 'food_comp', 'hub+ingredient'], args.len_metapath, p=[0.3, 0.25, 0.45])) for _ in range(args.num_metapath)]
-        elif args.which_metapath == 'starthub':
+
+        elif args.which_metapath == 'chem+ii':
             return_list = []
+            # 1. ingr-ingr only
+            ingr_ingr_list = ['hub+ingredient', 'no_hub+ingredient']*int(args.len_metapath)
+            for _ in range(args.num_metapath):
+                return_list.append(ingr_ingr_list)
+            return return_list
+
+        elif args.which_metapath == 'chem+if':
+            return_list = []
+            # 1. ingr-ingr only
+            ingr_ingr_list = ['hub+ingredient', 'no_hub+ingredient']*int(args.len_metapath)
             for _ in range(args.num_metapath):
                 small_list = ['hub+ingredient']
                 remain_list = list(np.random.choice(['no_hub+ingredient', 'no_hub+food_comp', 'hub+ingredient'], args.len_metapath-1, p=[0.3, 0.25, 0.45]))
                 return_list.append(small_list + remain_list)
             return return_list
-        elif args.which_metapath == 'hxxhxxh':
+
+        elif args.which_metapath == 'chem+ii+if':
             return_list = []
+            # 1. ingr-ingr only
+            ingr_ingr_list = ['hub+ingredient', 'no_hub+ingredient']*int(args.len_metapath)
             for _ in range(args.num_metapath):
                 small_list = ['hub+ingredient']
-                remain_list1 = list(np.random.choice(['no_hub+ingredient', 'food_comp', 'hub+ingredient'], int(args.len_metapath/2), p=[0.4, 0.4, 0.2]))
-                remain_list2 = list(np.random.choice(['no_hub+ingredient', 'food_comp', 'hub+ingredient'], int(args.len_metapath/2), p=[0.4, 0.4, 0.2]))
-                return_list.append(small_list + remain_list1 + small_list + remain_list2 + small_list)
+                remain_list = list(np.random.choice(['no_hub+ingredient', 'no_hub+food_comp', 'hub+ingredient'], args.len_metapath-1, p=[0.3, 0.25, 0.45]))
+                return_list.append(small_list + remain_list)
+
+            # 2. ingr-ingr only
+            ingr_ingr_list = ['hub+ingredient', 'no_hub+ingredient']*int(args.len_metapath)
+            for _ in range(args.num_metapath):
+                return_list.append(ingr_ingr_list)
             return return_list
+
         else:
             return None
 
@@ -46,10 +68,16 @@ class MetaPathWalker(object):
         print("Creating Metapath Walks...")
         walks = []
         for node in tqdm(self.graph.nodes()):
-            node_info = self.graph.nodes[node]
-            for meta_path in meta_paths:
-                for w in range(num_walks):
-                    walk = self.meta_walk(node_info, node, meta_path)
+            # only hub-ingr[0] - comp[0] - hub-ingr[0] - comp[1] - ...
+
+            if "chem" in args.which_metapath:
+                walk = self.chemical_walk(node)
+                if walk is not None:
+                    walks.append(walk)
+
+            for _ in range(num_walks):
+                for meta_path in meta_paths:
+                    walk = self.meta_walk(node, meta_path)
                     if walk is not None:
                         walks.append(walk)
 
@@ -57,40 +85,79 @@ class MetaPathWalker(object):
         walks = list(walks for walks,_ in itertools.groupby(walks))
         print("Number of MetaPath Walks Created: {}".format(len(walks)))
 
-        file = "{}metapath_{}-whichmeta_{}-num_walks_{}-len_walk_{}-num_metapath_{}-dim.pickle".format(args.output_path, args.which_metapath, args.num_walks_metapath, args.len_metapath, args.num_metapath, args.dim)
+        file = "{}metapath_{}-whichmeta_{}-num_walks_{}-len_walk_{}-num_metapath_{}-dim.txt".format(args.input_path_metapaths, args.which_metapath, args.num_walks_metapath, args.len_metapath, args.num_metapath, args.dim)
         with open(file, "w") as fw:
             for walk in walks:
                 for node in walk:
-                    node_info = self.graph.nodes[node]
                     fw.write("{} ".format(node))
                 fw.write("\n")
 
-    def meta_walk(self, node_info, start_node, meta_path):
-        meta_pos = 0
-        meta_current = node_info['is_hub']+"+"+node_info['type']
+    def chemical_walk(self, walk_start):
+        walk_start_info = self.graph.nodes[walk_start]
+        walk_start_ishub = walk_start_info['is_hub']
 
-        if meta_current != meta_path[0]:
+        walk = []
+        if walk_start_ishub == 'hub':
+            neighbors_chemical = []
+            neighbors = list(nx.neighbors(self.graph, walk_start))
+            for neighbor in neighbors:
+                neighbor_current_info = self.graph.nodes[neighbor]
+                neighbor_current_type = neighbor_current_info['type']
+                if neighbor_current_type == 'food_comp' or neighbor_current_type == 'drug_comp':
+                    neighbors_chemical.append(neighbor)
+            for neighbor in neighbors_chemical:
+                walk = walk + [walk_start, neighbor]
+            return walk
+        else:
+            return None
+
+
+    def meta_walk(self, walk_start, meta_path):
+        walk_start_info = self.graph.nodes[walk_start]
+        meta = walk_start_info['is_hub']+"+"+walk_start_info['type']
+        meta_pos = 0
+
+        # print("\n\n")
+        # print(meta_path)
+        # print(meta)
+
+        if meta != meta_path[0]:
             return None
         else:
-            walk = [start_node]
+            walk = [walk_start]
             while len(walk) < len(meta_path):
                 meta_pos += 1
-                neighs = list(nx.neighbors(self.graph, walk[-1]))
-                if len(neighs) < 2:
+                # retreive the neighbors of last walk
+                walk_current = walk[-1]
+                neighbors = list(nx.neighbors(self.graph, walk_current))
+                # if only one neighbor, break.
+                if len(neighbors) < 2:
                     break
-                filtered_neighs = self.filter_neighs(neighs, meta_path[meta_pos], meta_current)
-                walk = walk + [random.sample(filtered_neighs, 1)[0]]
+                # filter neighbor according to current meta_path
+                filtered_neighbors = self.filter_neighbors(neighbors, meta_path[meta_pos])
+
+                # print("===")
+                # print(walk_current)
+                # print(neighbors)
+                # print(filtered_neighbors)
+
+                if len(filtered_neighbors) < 2:
+                    break
+                walk = walk + [random.sample(filtered_neighbors, 1)[0]]
+                # print(walk)
 
         if len(list(set(walk))) == len(meta_path):
             return walk
         else:
             return None
 
-    def filter_neighs(self, neighs, meta_type, meta_current):
-        filtered = neighs
-        for n in neighs:
-            if meta_current != meta_type:
-                filtered.remove(n)
+    def filter_neighbors(self, neighbors, meta):
+        filtered = []
+        for neighbor in neighbors:
+            neighbor_current_info = self.graph.nodes[neighbor]
+            neighbor_current_meta = neighbor_current_info['is_hub']+"+"+neighbor_current_info['type']
+            if neighbor_current_meta == meta:
+                filtered.append(neighbor)
         return filtered
 
 class DeepWalker(object):

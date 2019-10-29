@@ -16,14 +16,14 @@ class SkipGramModel(nn.Module):
         self.emb_dimension = emb_dimension      # column / 128
         self.weights = pretrained_weights
 
-        if is_metapath:
-            self.weights = torch.FloatTensor(self.weights)
-            self.u_embeddings = nn.Embedding.from_pretrained(self.weights)
-            self.v_embeddings = nn.Embedding.from_pretrained(self.weights)
-
-        else:
-            self.u_embeddings = nn.Embedding(emb_size, emb_dimension, sparse=True)
-            self.v_embeddings = nn.Embedding(emb_size, emb_dimension, sparse=True)
+        # if is_metapath:
+        #     self.weights = torch.FloatTensor(self.weights)
+        #     self.u_embeddings = nn.Embedding.from_pretrained(self.weights)
+        #     self.v_embeddings = nn.Embedding.from_pretrained(self.weights)
+        #
+        # else:
+        self.u_embeddings = nn.Embedding(emb_size, emb_dimension, sparse=True)
+        self.v_embeddings = nn.Embedding(emb_size, emb_dimension, sparse=True)
 
         initrange = 1.0 / self.emb_dimension
         init.uniform_(self.u_embeddings.weight.data, -initrange, initrange)

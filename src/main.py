@@ -25,15 +25,6 @@ def main():
     graph, graph_ingr_only = graph_reader(args.input_nodes, args.input_edges)
     """
     2. Simple Node2vec with DeepWalker - Ingredient-Ingredient
-
-    self.base_walker = DeepWalker(self.graph, self.args)
-    print("\nDoing base random walks.\n")
-    self.base_walker.create_features()
-    print("\nLearning the base model.\n")
-    self.base_node_embedding = self.base_walker.learn_base_embedding()
-    print("\nDeleting the base walker.\n")
-    del self.base_walker
-
     """
     #node2vec = Node2Vec(args, graph_ingr_only)
     #node2vec.train()
