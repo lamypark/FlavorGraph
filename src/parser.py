@@ -8,10 +8,10 @@ def parameter_parser():
 
     # Input-Output
     parser.add_argument('--input_nodes',
-                        default="./input/nodes_small_191029.csv",
+                        default="./input/nodes_191029.csv",
                         type=str, help="input_file")
     parser.add_argument('--input_edges',
-                        default="./input/edges_small_191029.csv",
+                        default="./input/edges_191029.csv",
                         type=str, help="input_file")
     parser.add_argument('--input_path_metapaths',
                         default="./input/paths/",
@@ -26,7 +26,7 @@ def parameter_parser():
 
     # Skip-Gram
     parser.add_argument('--dim', default=128, type=int, help="embedding dimensions")
-    parser.add_argument('--window_size', default=10, type=int, help="context window size")
+    parser.add_argument('--window_size', default=5, type=int, help="context window size")
     parser.add_argument('--iterations', default=30, type=int, help="iterations")
     parser.add_argument('--batch_size', default=50, type=int, help="batch size")
     parser.add_argument('--care_type', default=0, type=int, help="if 1, heterogeneous negative sampling, else normal negative sampling")
@@ -37,15 +37,15 @@ def parameter_parser():
     # Graph2vec - common
     parser.add_argument('--skip_paths', default=False, action="store_true")
 
-    # Node2vec - DeepWalker
-    parser.add_argument('--num_walks_deepwalk', default=50, type=int, help="number of walks")
-    parser.add_argument('--which_deepwalk', default='weighted_small_walk', type=str)
-    parser.add_argument('--len_deepwalk', default=5, type=int, help="length of deepwalk")
+    # # Node2vec - DeepWalker
+    # parser.add_argument('--num_walks_deepwalk', default=50, type=int, help="number of walks")
+    # parser.add_argument('--which_deepwalk', default='weighted_small_walk', type=str)
+    # parser.add_argument('--len_deepwalk', default=5, type=int, help="length of deepwalk")
 
     # Metapath2vec - MetapathWalker
-    parser.add_argument('--num_walks_metapath', default=20, type=int, help="number of walks")
-    parser.add_argument('--which_metapath', default='chem+ii', type=str)
-    parser.add_argument('--num_metapath', default=10, type=int, help="number of metapath")
+    parser.add_argument('--num_walks_metapath', default=5, type=int, help="number of walks")
+    parser.add_argument('--which_metapath', default='ALL+HC_CH+CHNH+NHCH', type=str)
+    parser.add_argument('--num_metapath', default=5, type=int, help="number of metapath")
     parser.add_argument('--len_metapath', default=10, type=int, help="length of metapath")
     parser.add_argument('--use_pretrained', default=False, type=int, help="store_true")
 

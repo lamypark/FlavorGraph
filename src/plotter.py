@@ -24,8 +24,15 @@ def plot_embedding(args, graph, mode=None):
     ingr2type={}
     for node in graph.nodes():
         node_info = graph.nodes[node]
-        node2ingr[node] = node_info['name']
-        ingr2type[node_info['name']] = node_info['type']
+        node_name = str(node_info['name'])+"_"+str(node)
+        node2ingr[node] = node_name
+
+        if node_info['type'] == 'ingredient':
+            ingr2type[node_name] = node_info['type']
+        elif node_info['type'] == 'compound':
+            ingr2type[node_name] = node_info['is_hub']
+        else:
+            print("Type Error")
 
     if mode == "deepwalk":
         file = "{}embedding_deepwalk_{}-whichmeta_{}-num_walks_{}-len_walk_{}-dim.pickle".format(args.output_path, args.which_deepwalk, args.num_walks_deepwalk, args.len_deepwalk, args.dim)
@@ -36,6 +43,8 @@ def plot_embedding(args, graph, mode=None):
 
     with open(file, "rb") as pickle_file:
         vectors = pickle.load(pickle_file)
+
+    print(len(vectors))
 
     node2vec = {}
     for node in vectors:
@@ -71,12 +80,12 @@ def plot_category(node2vec, node2vec_tsne, path, node2ingr, ingr2type=None, with
 
         category2color = {
         'ingredient' :  sns.xkcd_rgb["red"],
-        'food_comp' : sns.xkcd_rgb["blue"],
-        'drug_comp' : sns.xkcd_rgb["green"],
+        'food' : sns.xkcd_rgb["blue"],
+        'drug' : sns.xkcd_rgb["green"],
         'None'      : sns.xkcd_rgb["black"]
         }
 
-        category_order = ['ingredient', 'food_comp', 'drug_comp']
+        category_order = ['ingredient', 'food', 'drug']
 
         make_plot_with_labels_legends(name=path,
         points=node2vec_tsne,

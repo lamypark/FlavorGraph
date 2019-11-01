@@ -1,13 +1,10 @@
 import torch
 from parser import parameter_parser
+
 from utils import tab_printer, graph_reader
 from dataloader import DataReader, DatasetLoader
-
 from graph2vec import Metapath2Vec, Node2Vec
 from plotter import plot_embedding
-
-#from splitter import SplitterTrainer
-#from preprocessor import data_reader_small
 
 def main():
     """
@@ -23,18 +20,17 @@ def main():
     1. read graph and load as torch dataset
     """
     graph, graph_ingr_only = graph_reader(args.input_nodes, args.input_edges)
-    """
-    2. Simple Node2vec with DeepWalker - Ingredient-Ingredient
-    """
-    #node2vec = Node2Vec(args, graph_ingr_only)
-    #node2vec.train()
-    #plot_embedding(args, graph_ingr_only, "deepwalk")
+
 
     """
-    3. Metapath2vec with MetaPathWalker - Ingredient-Ingredient / Ingredient-Food-like Compound / Ingredient-Drug-like Compound
+    2. Metapath2vec with MetaPathWalker - Ingredient-Ingredient / Ingredient-Food-like Compound / Ingredient-Drug-like Compound
     """
     metapath2vec = Metapath2Vec(args, graph)
     metapath2vec.train()
+
+    """
+    3. Plot your embedding if you like
+    """
     plot_embedding(args, graph, "metapath")
 
 if __name__ == "__main__":
