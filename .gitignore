@@ -7,6 +7,7 @@ input/FlavorDB/
 input/HyperFoods/
 input/KitcheNette/
 input/paths/
+input/*.pickle
 
 # output files
 output/*.html
