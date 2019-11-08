@@ -9,7 +9,7 @@ import pickle
 
 from dataloader import DataReader, DatasetLoader
 from walkers import DeepWalker, MetaPathWalker
-from model import SkipGramModel
+from model import SkipGramModel, SkipGramModelAug
 
 class Metapath2Vec:
     def __init__(self, args, graph):
@@ -54,7 +54,9 @@ class Metapath2Vec:
         self.batch_size = args.batch_size
         self.iterations = args.iterations
         self.initial_lr = args.initial_lr
-        self.skip_gram_model = SkipGramModel(self.emb_size, self.emb_dimension, pretrained_weights=None, is_metapath=False)
+
+        self.skip_gram_model = SkipGramModelAug(self.emb_size, self.emb_dimension, pretrained_weights=None, is_metapath=False, nodes=self.data.id2word)
+        # self.skip_gram_model = SkipGramModel(self.emb_size, self.emb_dimension, pretrained_weights=None, is_metapath=False)
 
         self.use_cuda = torch.cuda.is_available()
         self.device = torch.device("cuda" if self.use_cuda else "cpu")
