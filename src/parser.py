@@ -27,7 +27,7 @@ def parameter_parser():
     # Skip-Gram
     parser.add_argument('--dim', default=128, type=int, help="embedding dimensions")
     parser.add_argument('--window_size', default=5, type=int, help="context window size")
-    parser.add_argument('--iterations', default=30, type=int, help="iterations")
+    parser.add_argument('--iterations', default=3, type=int, help="iterations")
     parser.add_argument('--batch_size', default=50, type=int, help="batch size")
     parser.add_argument('--care_type', default=0, type=int, help="if 1, heterogeneous negative sampling, else normal negative sampling")
     parser.add_argument('--initial_lr', default=0.025, type=float, help="learning rate")
@@ -36,6 +36,10 @@ def parameter_parser():
 
     # Graph2vec - common
     parser.add_argument('--skip_paths', default=False, action="store_true")
+    # parser.add_argument('--augment', default=False, action="store_true")
+    parser.add_argument('--aux_train', default=False, action="store_true")
+    parser.add_argument('--aux_coef', default=0.0, type=float)
+    
 
     # # Node2vec - DeepWalker
     # parser.add_argument('--num_walks_deepwalk', default=50, type=int, help="number of walks")

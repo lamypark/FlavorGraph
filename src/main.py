@@ -6,6 +6,10 @@ from dataloader import DataReader, DatasetLoader
 from graph2vec import Metapath2Vec, Node2Vec
 from plotter import plot_embedding
 
+import os 
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+
+
 def main():
     """
     Parsing command line parameters.

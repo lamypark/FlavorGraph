@@ -18,7 +18,7 @@ def plot_embedding(args, graph, mode=None):
     """
     Plot Embedding
     """
-
+    small_mode = True if 'small' in args.input_nodes else False
     print("\nPlot Embedding...")
     node2ingr={}
     ingr2type={}
@@ -35,9 +35,9 @@ def plot_embedding(args, graph, mode=None):
             print("Type Error")
 
     if mode == "deepwalk":
-        file = "{}embedding_deepwalk_{}-whichmeta_{}-num_walks_{}-len_walk_{}-dim.pickle".format(args.output_path, args.which_deepwalk, args.num_walks_deepwalk, args.len_deepwalk, args.dim)
+        file = "{}embedding_deepwalk_{}-whichmeta_{}-num_walks_{}-len_walk_{}-num_metapath_{}-dim_{}-small_{}-aux.pickle".format(args.output_path, args.which_metapath, args.num_walks_metapath, args.len_metapath, args.num_metapath, args.dim, small_mode, args.aux_train)
     elif mode == "metapath":
-        file = "{}embedding_metapath_{}-whichmeta_{}-num_walks_{}-len_walk_{}-num_metapath_{}-dim.pickle".format(args.output_path, args.which_metapath, args.num_walks_metapath, args.len_metapath, args.num_metapath, args.dim)
+        file = "{}embedding_metapath_{}-whichmeta_{}-num_walks_{}-len_walk_{}-num_metapath_{}-dim_{}-small_{}-aux.pickle".format(args.output_path, args.which_metapath, args.num_walks_metapath, args.len_metapath, args.num_metapath, args.dim, small_mode, args.aux_train)
     else:
         print("No Mode Selected")
 
@@ -55,6 +55,19 @@ def plot_embedding(args, graph, mode=None):
     node2vec_tsne = load_TSNE(node2vec, dim=2)
     save_path = file.replace("pickle", "html")
     plot_category(node2vec, node2vec_tsne, save_path, node2ingr, ingr2type, True)
+
+    # For Binary Vectors
+    if args.aux_train:
+        file = file.replace('.pickle', '_binary.pickle')
+        with open(file, "rb") as pickle_file:
+            vectors = pickle.load(pickle_file)
+            node2vec = {}
+        for node in vectors:
+            node2vec[int(node)] = vectors[node]
+        node2vec_tsne = load_TSNE(node2vec, dim=2)
+        save_path = file.replace("pickle", "html")
+        plot_category(node2vec, node2vec_tsne, save_path, node2ingr, ingr2type, True)
+
     return
 
 def plot_category(node2vec, node2vec_tsne, path, node2ingr, ingr2type=None, withLegends=False):
