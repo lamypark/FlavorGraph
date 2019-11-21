@@ -67,6 +67,7 @@ class MetaPathWalker(object):
 
         #print("Number of MetaPath Walks Created: {}".format(len(walks)))
         walks = list(walks for walks,_ in itertools.groupby(walks))
+        #print(walks)
         #random.shuffle(walks)
         print("Number of MetaPath Walks Created: {}".format(len(walks)))
 
@@ -149,12 +150,12 @@ class MetaPathWalker(object):
                 walk_current = walk[-1]
                 neighbors = list(nx.neighbors(self.graph, walk_current))
                 # if only one neighbor, break.
-                if len(neighbors) < 2:
+                if len(neighbors) < 1:
                     break
                 # filter neighbor according to current meta_path
                 filtered_neighbors = self.filter_neighbors(neighbors, meta_path[meta_pos])
 
-                if len(filtered_neighbors) < 2:
+                if len(filtered_neighbors) < 1:
                     break
                 walk = walk + [random.sample(filtered_neighbors, 1)[0]]
                 #print("\n\n===")
