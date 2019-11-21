@@ -104,10 +104,10 @@ class SkipGramModelAux(SkipGramModel):
             nn.Linear(self.aug_dimension, self.aug_dimension)
         )
 
-        nn.init.sparse_(self.u_embeddings.weight.data, sparsity=0.75, std=0.01)
-        nn.init.sparse_(self.v_embeddings.weight.data, sparsity=0.75, std=0.01)
-        nn.init.sparse_(self.encoder[0].weight.data, sparsity=0.75, std=0.0001)
-        nn.init.sparse_(self.encoder[2].weight.data, sparsity=0.75, std=0.0001)
+        nn.init.sparse_(self.u_embeddings.weight.data, sparsity=0.66, std=0.001)
+        nn.init.sparse_(self.v_embeddings.weight.data, sparsity=0.66, std=0.001)
+        nn.init.sparse_(self.encoder[0].weight.data, sparsity=0.66, std=0.001)
+        nn.init.sparse_(self.encoder[2].weight.data, sparsity=0.66, std=0.001)
 
     def forward(self, pos_u, pos_v, neg_v):
         emb_u = self.u_embeddings(pos_u)
@@ -153,7 +153,8 @@ class SkipGramModelAux(SkipGramModel):
         binary_dict = dict()
         embedding = self.u_embeddings.weight.cpu().data.numpy()
         try:
-            transform = self.encoder[0].weight.cpu().data.numpy()
+            transform1 = self.encoder[0].weight.cpu().data.numpy()
+            transform2 = self.encoder[2].weight.cpu().data.numpy()
         except Exception as e:
             print(e)
 
@@ -163,7 +164,9 @@ class SkipGramModelAux(SkipGramModel):
             except:
                 print(w)
             try:
-                x = np.matmul(transform, embedding[wid])
+                x = np.matmul(transform1, embedding[wid])
+                x = np.tanh(x)
+                x = np.matmul(transform2, x)
                 binary_dict[w] = x
             except Exception as e:
                 print(e)
