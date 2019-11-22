@@ -3,10 +3,10 @@ from parser import parameter_parser
 
 from utils import tab_printer, graph_reader
 from dataloader import DataReader, DatasetLoader
-from graph2vec import Metapath2Vec, Node2Vec
+from graph2vec import Metapath2Vec
 from plotter import plot_embedding
 
-import os 
+import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 

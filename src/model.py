@@ -10,9 +10,8 @@ import numpy as np
     u_embedding: Embedding for center word.
     v_embedding: Embedding for neighbor words.
 """
-
 def load_augmentive_features(nodes):
-    PICKLE_PATH = "./input/node2fp_revised_small_1113.pickle" if len(nodes) < 3000 else "./input/node2fp_revised_1113.pickle"
+    PICKLE_PATH = "./input/node2fp_revised_1120.pickle"
     print("Loading Chemical Vectors from ", PICKLE_PATH)
     with open(PICKLE_PATH, "rb") as handle:
         binary_dict = pickle.load(handle)
@@ -37,16 +36,17 @@ def load_augmentive_features(nodes):
     vector_length = augmentive_matrix.shape[1]
     return torch.tensor(augmentive_matrix, requires_grad=False).float().to("cuda"), vector_length, torch.tensor(binary_mask, requires_grad=False).float().to("cuda")
 
-
 class SkipGramModel(nn.Module):
-    def __init__(self, emb_size, emb_dimension, pretrained_weights=None, is_metapath=False):
+    def __init__(self, emb_size, emb_dimension):
         super(SkipGramModel, self).__init__()
         self.emb_size = emb_size                # row / 1825
         self.emb_dimension = emb_dimension      # column / 128
-        self.weights = pretrained_weights
 
         self.u_embeddings = nn.Embedding(emb_size, emb_dimension, sparse=True)
         self.v_embeddings = nn.Embedding(emb_size, emb_dimension, sparse=True)
+
+        self.print_network(self.u_embeddings, "u_embeddings")
+        self.print_network(self.v_embeddings, "v_embeddings")
 
         initrange = 1.0 / self.emb_dimension
         init.uniform_(self.u_embeddings.weight.data, -initrange, initrange)
@@ -67,16 +67,21 @@ class SkipGramModel(nn.Module):
 
         return torch.mean(score + neg_score)
 
+    def print_network(self, model, name):
+        """Print out the network information."""
+        num_params = 0
+        for p in model.parameters():
+            num_params += p.numel()
+        print("\nModel Name: \"{}\"".format(name))
+        print(model)
+        print("The number of parameters: {}".format(num_params))
+
     def save_embedding(self, id2word, file_name):
         embed_dict = dict()
         embedding = self.u_embeddings.weight.cpu().data.numpy()
-        # with open(file_name, 'w') as f:
-        #     f.write('%d %d\n' % (len(id2word), self.emb_dimension))
         for wid, w in id2word.items():
             try:
                 embed_dict[w] = embedding[wid]
-                # e = ' '.join(map(lambda x: str(x), embedding[wid]))
-                # f.write('%s %s\n' % (w, e))
             except:
                 print(w)
         with open(file_name, "wb") as handle:
@@ -84,11 +89,10 @@ class SkipGramModel(nn.Module):
 
 
 class SkipGramModelAux(SkipGramModel):
-    def __init__(self, emb_size, emb_dimension, pretrained_weights=None, is_metapath=False, nodes=None, aux_coef=0.0001):
-        super(SkipGramModelAux, self).__init__(emb_size, emb_dimension, pretrained_weights, is_metapath)
+    def __init__(self, emb_size, emb_dimension, nodes=None, aux_coef=0.0001):
+        super(SkipGramModelAux, self).__init__(emb_size, emb_dimension)
         self.emb_size = emb_size                # row / 1825
         self.emb_dimension = emb_dimension      # column / 128
-        self.weights = pretrained_weights
         self.aux_coef = aux_coef
         self.aux_loss = 0.0
 
@@ -97,7 +101,11 @@ class SkipGramModelAux(SkipGramModel):
         self.v_embeddings = nn.Embedding(emb_size, emb_dimension)
         self.a_embeddings = nn.Embedding(emb_size, self.aug_dimension)
         self.a_embeddings.weight = nn.Parameter(self.aug_embeddings, requires_grad=False)
-        
+
+        self.print_network(self.u_embeddings, "u_embeddings")
+        self.print_network(self.v_embeddings, "v_embeddings")
+        self.print_network(self.a_embeddings, "v_embeddings")
+
         self.encoder = nn.Sequential(
             nn.Linear(self.emb_dimension, self.aug_dimension),
             nn.Tanh(),
@@ -113,7 +121,7 @@ class SkipGramModelAux(SkipGramModel):
         emb_u = self.u_embeddings(pos_u)
         emb_v = self.v_embeddings(pos_v)
         emb_neg_v = self.v_embeddings(neg_v)
-        
+
         emb_u = self.encoder(emb_u)
         emb_v = self.encoder(emb_v)
         emb_neg_v = self.encoder(emb_neg_v)
@@ -127,13 +135,13 @@ class SkipGramModelAux(SkipGramModel):
 
         aux_emb_v1 = emb_v[pos_v_masks.nonzero()[:, 0]]
         aux_emb_v2 = self.a_embeddings(pos_v)[pos_v_masks.nonzero()[:, 0]]
-        
+
         aux_neg_v1 = emb_neg_v.reshape(-1, 881)[neg_v_masks.nonzero()[:, 0]]
         aux_neg_v2 = self.a_embeddings(neg_v).reshape(-1, 881)[neg_v_masks.nonzero()[:, 0]]
 
         criterion = nn.BCEWithLogitsLoss()
 
-        aux_loss1 = criterion(aux_emb_u1, aux_emb_u2) 
+        aux_loss1 = criterion(aux_emb_u1, aux_emb_u2)
         aux_loss2 = criterion(aux_emb_v1, aux_emb_v2)
         aux_loss3 = criterion(aux_neg_v1, aux_neg_v2)
         self.aux_loss = self.aux_coef * (aux_loss1 + aux_loss2 + aux_loss3)
@@ -146,7 +154,16 @@ class SkipGramModelAux(SkipGramModel):
         neg_score = torch.clamp(neg_score, max=10, min=-10)
         neg_score = -torch.sum(F.logsigmoid(-neg_score), dim=1)
 
-        return torch.mean(score + neg_score) +  self.aux_loss 
+        return torch.mean(score + neg_score) +  self.aux_loss
+
+    def print_network(self, model, name):
+        """Print out the network information."""
+        num_params = 0
+        for p in model.parameters():
+            num_params += p.numel()
+        print("\nModel Name: \"{}\"".format(name))
+        print(model)
+        print("The number of parameters: {}".format(num_params))
 
     def save_embedding(self, id2word, file_name):
         embed_dict = dict()
@@ -175,38 +192,6 @@ class SkipGramModelAux(SkipGramModel):
             pickle.dump(embed_dict, handle)
         with open(file_name.replace('.pickle', '_binary.pickle'), "wb") as handle:
             pickle.dump(binary_dict, handle)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # class SkipGramModelAug(SkipGramModel):
 #     def __init__(self, emb_size, emb_dimension, pretrained_weights=None, is_metapath=False, nodes=None):

@@ -28,19 +28,19 @@ class MetaPathWalker(object):
         """
         return_list = []
         if 'HC_CH' in args.which_metapath:
-            print("Metapath HC_CH")
+            print("# Metapath HC_CH")
             self.enable_chemical_walk = True
 
         if 'CHNH' in args.which_metapath:
-            print("Metapath CHNH")
+            print("# Metapath CHNH")
             metapath_list = ['compound', 'ingredient+hub', 'ingredient+no_hub', 'ingredient+hub']*int(args.len_metapath)
-            for _ in range(args.num_metapath):
+            for _ in range(args.num_metapaths):
                 return_list.append(metapath_list)
 
         if 'NHCH' in args.which_metapath:
-            print("Metapath NHCH")
+            print("# Metapath NHCH")
             metapath_list = ['ingredient+no_hub', 'ingredient+hub', 'compound', 'ingredient+hub']*int(args.len_metapath)
-            for _ in range(args.num_metapath):
+            for _ in range(args.num_metapaths):
                 return_list.append(metapath_list)
 
         if not return_list:
@@ -49,7 +49,7 @@ class MetaPathWalker(object):
             return return_list
 
     def create_metapath_walks(self, args, num_walks, meta_paths):
-        print("\n\nCreating Metapath Walks...")
+        print("## Creating Metapath Walks...")
         walks = []
         for node in tqdm(self.graph.nodes()):
             for _ in range(num_walks):
@@ -71,7 +71,7 @@ class MetaPathWalker(object):
         #random.shuffle(walks)
         print("Number of MetaPath Walks Created: {}".format(len(walks)))
 
-        file = "{}metapath_{}-whichmeta_{}-num_walks_{}-len_walk_{}-num_metapath_{}-dim.txt".format(args.input_path_metapaths, args.which_metapath, args.num_walks_metapath, args.len_metapath, args.num_metapath, args.dim)
+        file = "{}{}-metapath_{}-whichmeta_{}-num_walks_{}-len_metapath_{}-num_metapaths.txt".format(args.input_path_metapaths, args.idx_metapath, args.which_metapath, args.num_walks, args.len_metapath, args.num_metapaths)
         with open(file, "w") as fw:
             for walk in walks:
                 for node in walk:
@@ -152,6 +152,7 @@ class MetaPathWalker(object):
                 # if only one neighbor, break.
                 if len(neighbors) < 1:
                     break
+
                 # filter neighbor according to current meta_path
                 filtered_neighbors = self.filter_neighbors(neighbors, meta_path[meta_pos])
 
@@ -188,72 +189,3 @@ class MetaPathWalker(object):
             if neighbor_current_meta == meta:
                 filtered.append(neighbor)
         return filtered
-
-class DeepWalker(object):
-    """
-    DeepWalk node embedding learner object.
-    A barebones implementation of "DeepWalk: Online Learning of Social Representations".
-    Paper: https://arxiv.org/abs/1403.6652
-    Video: https://www.youtube.com/watch?v=aZNtHJwfIVg
-    """
-    def __init__(self, args, graph):
-        """
-        :param args: Arguments object.
-        :param graph: NetworkX graph.
-        """
-        self.args = args
-        self.graph = graph
-
-    def small_walk(self, start_node):
-        """
-        Doing a truncated random walk.
-        :param start_node: Start node for random walk.
-        :return walk: Truncated random walk list of nodes with fixed maximal length.
-        """
-        walk = [start_node]
-        while len(walk) < self.args.len_deepwalk:
-            if len(list(nx.neighbors(self.graph,walk[-1]))) == 0:
-                break
-            walk = walk + [random.sample(list(nx.neighbors(self.graph,walk[-1])),1)[0]]
-        return walk
-
-    def weighted_small_walk(self, start_node):
-        """
-        Doing a truncated random walk.
-        :param start_node: Start node for random walk.
-        :return walk: Truncated random walk list of nodes with fixed maximal length.
-        """
-        walk = [start_node]
-        while len(walk) < self.args.len_deepwalk:
-            current_node = walk[-1]
-            neighbors_of_end_node = list(nx.neighbors(self.graph,current_node))
-            if len(neighbors_of_end_node) == 0:
-                break
-            next_node = random.sample(neighbors_of_end_node,1)[0]
-            walk += [next_node]
-        return walk
-
-    def create_deepwalk_paths(self):
-        """
-        Creating random walks from each node.
-        """
-        walks = []
-        ingrs = []
-        for node in tqdm(self.graph.nodes()):
-            for k in range(self.args.num_walks_deepwalk):
-                walk = self.weighted_small_walk(node)
-                walks.append(walk)
-
-        print(len(ingrs))
-
-        walks = list(walks for walks,_ in itertools.groupby(walks))
-        print("Number of Deepwalk Walks Created: {}".format(len(walks)))
-
-        file = "{}deepwalk_{}-whichmeta_{}-num_walks_{}-len_walk_{}-dim.txt".format(self.args.input_path_deepwalkpaths, self.args.which_deepwalk, self.args.num_walks_deepwalk, self.args.len_deepwalk, self.args.dim)
-
-        with open(file, "w") as fw:
-            for walk in walks:
-                for node in walk:
-                    node_info = self.graph.nodes[node]
-                    fw.write("{} ".format(node))
-                fw.write("\n")

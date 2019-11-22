@@ -34,12 +34,8 @@ def plot_embedding(args, graph, mode=None):
         else:
             print("Type Error")
 
-    if mode == "deepwalk":
-        file = "{}embedding_deepwalk_{}-whichmeta_{}-num_walks_{}-len_walk_{}-num_metapath_{}-dim_{}-small_{}-aux.pickle".format(args.output_path, args.which_metapath, args.num_walks_metapath, args.len_metapath, args.num_metapath, args.dim, small_mode, args.aux_train)
-    elif mode == "metapath":
-        file = "{}embedding_metapath_{}-whichmeta_{}-num_walks_{}-len_walk_{}-num_metapath_{}-dim_{}-small_{}-aux.pickle".format(args.output_path, args.which_metapath, args.num_walks_metapath, args.len_metapath, args.num_metapath, args.dim, small_mode, args.aux_train)
-    else:
-        print("No Mode Selected")
+    file = "{}{}-embedding_{}-metapath_{}-dim_{}-initial_lr_{}-window_size_{}-iterations_{}-min_count-_{}-isCSP_{}-CSPcoef_.pickle".format(
+                        args.output_path, args.idx_embed, args.idx_metapath, args.dim, args.initial_lr, args.window_size, args.iterations, args.min_count, args.CSP_train, args.CSP_coef)
 
     with open(file, "rb") as pickle_file:
         vectors = pickle.load(pickle_file)
@@ -57,7 +53,7 @@ def plot_embedding(args, graph, mode=None):
     plot_category(node2vec, node2vec_tsne, save_path, node2ingr, ingr2type, True)
 
     # For Binary Vectors
-    if args.aux_train:
+    if args.CSP_train:
         file = file.replace('.pickle', '_binary.pickle')
         with open(file, "rb") as pickle_file:
             vectors = pickle.load(pickle_file)
@@ -67,7 +63,6 @@ def plot_embedding(args, graph, mode=None):
         node2vec_tsne = load_TSNE(node2vec, dim=2)
         save_path = file.replace("pickle", "html")
         plot_category(node2vec, node2vec_tsne, save_path, node2ingr, ingr2type, True)
-
     return
 
 def plot_category(node2vec, node2vec_tsne, path, node2ingr, ingr2type=None, withLegends=False):
