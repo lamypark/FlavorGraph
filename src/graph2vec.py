@@ -20,22 +20,24 @@ class Metapath2Vec:
         walker = MetaPathWalker(args, graph)
 
         files = os.listdir(args.input_path_metapaths)
-        if len(files) == 0:
+        is_file = False
+        for file in files:
+            fullFilename = os.path.join(args.input_path_metapaths, file)
+            # if file exists, load the file.
+            if file.startswith(args.idx_metapath):
+                is_file = True
+                print("\n !!! Found the file that you have specified...")
+                self.inputFileName = "{}{}-metapath_{}-whichmeta_{}-num_walks_{}-len_metapath_{}-num_metapaths.txt".format(args.input_path_metapaths, args.idx_metapath, args.which_metapath, args.num_walks, args.len_metapath, args.num_metapaths)
+                print("### Metapaths Loaded...", self.inputFileName)
+
+        # if file does not exists, create the new one.
+        if not is_file:
             print("\n !!! There is no metapaths with the given parameters...")
             print("### Creating new Metapaths...")
             self.metapaths = walker.generate_metapaths(args)
             walker.create_metapath_walks(args, args.num_walks, self.metapaths)
             self.inputFileName = "{}{}-metapath_{}-whichmeta_{}-num_walks_{}-len_metapath_{}-num_metapaths.txt".format(args.input_path_metapaths, args.idx_metapath, args.which_metapath, args.num_walks, args.len_metapath, args.num_metapaths)
             print("### Metapaths Loaded...", self.inputFileName)
-        else:
-            for file in files:
-                fullFilename = os.path.join(args.input_path_metapaths, file)
-                if file.startswith(args.idx_metapath):
-                    print("\n !!! Found the file that you have specified...")
-                    self.inputFileName = "{}{}-metapath_{}-whichmeta_{}-num_walks_{}-len_metapath_{}-num_metapaths.txt".format(args.input_path_metapaths, args.idx_metapath, args.which_metapath, args.num_walks, args.len_metapath, args.num_metapaths)
-                    print("### Metapaths Loaded...", self.inputFileName)
-                else:
-                    print("\n !!! Please, check your {} metapath file".format(args.idx_metapath))
 
         # 2. read data
         print("\n\n##########################################################################")

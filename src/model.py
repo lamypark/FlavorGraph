@@ -97,25 +97,25 @@ class SkipGramModelAux(SkipGramModel):
         self.aux_loss = 0.0
 
         self.aug_embeddings, self.aug_dimension, self.binary_masks = load_augmentive_features(nodes)
-        self.u_embeddings = nn.Embedding(emb_size, emb_dimension)
-        self.v_embeddings = nn.Embedding(emb_size, emb_dimension)
-        self.a_embeddings = nn.Embedding(emb_size, self.aug_dimension)
+        self.u_embeddings = nn.Embedding(self.emb_size, self.emb_dimension)
+        self.v_embeddings = nn.Embedding(self.emb_size, self.emb_dimension)
+        self.encoder = nn.Linear(self.emb_dimension, self.aug_dimension)
+        self.a_embeddings = nn.Embedding(self.emb_size, self.aug_dimension)
         self.a_embeddings.weight = nn.Parameter(self.aug_embeddings, requires_grad=False)
+        self.decoder = nn.Linear(self.aug_dimension, self.emb_dimension)
 
         self.print_network(self.u_embeddings, "u_embeddings")
-        self.print_network(self.v_embeddings, "v_embeddings")
-        self.print_network(self.a_embeddings, "v_embeddings")
+        self.print_network(self.encoder, "encoder")
+        self.print_network(self.a_embeddings, "a_embeddings")
+        self.print_network(self.decoder, "decoder")
 
-        self.encoder = nn.Sequential(
-            nn.Linear(self.emb_dimension, self.aug_dimension),
-            nn.Tanh(),
-            nn.Linear(self.aug_dimension, self.aug_dimension)
-        )
-
-        nn.init.sparse_(self.u_embeddings.weight.data, sparsity=0.66, std=0.001)
-        nn.init.sparse_(self.v_embeddings.weight.data, sparsity=0.66, std=0.001)
-        nn.init.sparse_(self.encoder[0].weight.data, sparsity=0.66, std=0.001)
-        nn.init.sparse_(self.encoder[2].weight.data, sparsity=0.66, std=0.001)
+        initrange = 1 / self.emb_size
+        init.uniform_(self.u_embeddings.weight.data, -initrange, initrange)
+        # nn.init.sparse_(self.u_embeddings.weight.data, sparsity=0.66, std=0.001)
+        nn.init.constant_(self.v_embeddings.weight.data, 0)
+        # nn.init.sparse_(self.v_embeddings.weight.data, sparsity=0.66, std=0.001)
+        nn.init.sparse_(self.encoder.weight.data, sparsity=0.66, std=0.001)
+        nn.init.sparse_(self.decoder.weight.data, sparsity=0.66, std=0.001)
 
     def forward(self, pos_u, pos_v, neg_v):
         emb_u = self.u_embeddings(pos_u)
@@ -126,6 +126,7 @@ class SkipGramModelAux(SkipGramModel):
         emb_v = self.encoder(emb_v)
         emb_neg_v = self.encoder(emb_neg_v)
 
+        # For Chemical Structure Prediction Loss
         pos_u_masks = self.binary_masks[pos_u]
         pos_v_masks = self.binary_masks[pos_v]
         neg_v_masks = self.binary_masks[neg_v].reshape(-1, 5).reshape(-1)
@@ -145,6 +146,11 @@ class SkipGramModelAux(SkipGramModel):
         aux_loss2 = criterion(aux_emb_v1, aux_emb_v2)
         aux_loss3 = criterion(aux_neg_v1, aux_neg_v2)
         self.aux_loss = self.aux_coef * (aux_loss1 + aux_loss2 + aux_loss3)
+
+        # For Main Skip-Gram Loss
+        emb_u = self.decoder(emb_u)
+        emb_v = self.decoder(emb_v)
+        emb_neg_v = self.decoder(emb_neg_v)
 
         score = torch.sum(torch.mul(emb_u, emb_v), dim=1)
         score = torch.clamp(score, max=10, min=-10)
@@ -170,8 +176,7 @@ class SkipGramModelAux(SkipGramModel):
         binary_dict = dict()
         embedding = self.u_embeddings.weight.cpu().data.numpy()
         try:
-            transform1 = self.encoder[0].weight.cpu().data.numpy()
-            transform2 = self.encoder[2].weight.cpu().data.numpy()
+            transform = self.encoder.weight.cpu().data.numpy()
         except Exception as e:
             print(e)
 
@@ -181,9 +186,7 @@ class SkipGramModelAux(SkipGramModel):
             except:
                 print(w)
             try:
-                x = np.matmul(transform1, embedding[wid])
-                x = np.tanh(x)
-                x = np.matmul(transform2, x)
+                x = np.matmul(transform, embedding[wid])
                 binary_dict[w] = x
             except Exception as e:
                 print(e)
