@@ -34,14 +34,17 @@ class MetaPathWalker(object):
         if 'CHNH' in args.which_metapath:
             print("# Metapath CHNH")
             metapath_list = ['compound', 'ingredient+hub', 'ingredient+no_hub', 'ingredient+hub']*int(args.len_metapath)
-            for _ in range(args.num_metapaths):
-                return_list.append(metapath_list)
+            return_list.append(metapath_list)
 
         if 'NHCH' in args.which_metapath:
             print("# Metapath NHCH")
             metapath_list = ['ingredient+no_hub', 'ingredient+hub', 'compound', 'ingredient+hub']*int(args.len_metapath)
-            for _ in range(args.num_metapaths):
-                return_list.append(metapath_list)
+            return_list.append(metapath_list)
+
+        if 'HN' in args.which_metapath:
+            print("# Meatapath HN")
+            metapath_list = ['ingredient+hub', 'ingredient+no_hub']*int(args.len_metapath)
+            return_list.append(metapath_list)
 
         if not return_list:
             return None
@@ -52,24 +55,25 @@ class MetaPathWalker(object):
         print("## Creating Metapath Walks...")
         walks = []
         for node in tqdm(self.graph.nodes()):
+            # num walks (rows)
             for _ in range(num_walks):
-                if self.enable_chemical_walk:
-                    walk = self.chemical_walk(node)
-                    if walk is not None:
-                        walks.append(walk)
+                # num metapaths (columns)
+                for _ in range(args.num_metapaths):
+                    if self.enable_chemical_walk:
+                        walk = self.chemical_walk(node)
+                        if walk is not None:
+                            walks.append(walk)
 
-                if meta_paths is not None:
-                    for _ in range(num_walks):
+                    if meta_paths is not None:
                         for meta_path in meta_paths:
                             walk = self.meta_walk(node, meta_path)
                             if walk is not None:
                                 walks.append(walk)
 
-        #print("Number of MetaPath Walks Created: {}".format(len(walks)))
-        walks = list(walks for walks,_ in itertools.groupby(walks))
-        #print(walks)
-        #random.shuffle(walks)
         print("Number of MetaPath Walks Created: {}".format(len(walks)))
+        walks = list(walk for walk,_ in itertools.groupby(sorted(walks)))
+        print("Filterd Number of MetaPath Walks: {}".format(len(walks)))
+        #random.shuffle(walks)
 
         file = "{}{}-metapath_{}-whichmeta_{}-num_walks_{}-len_metapath_{}-num_metapaths.txt".format(args.input_path_metapaths, args.idx_metapath, args.which_metapath, args.num_walks, args.len_metapath, args.num_metapaths)
         with open(file, "w") as fw:
@@ -89,7 +93,7 @@ class MetaPathWalker(object):
             neighbors = list(nx.neighbors(self.graph, walk_start))
 
             # if too popular compound
-            if len(neighbors) > 150 and len(neighbors) < 5:
+            if len(neighbors) > 150:
                 #print("Filtered while creating chemical path:", walk_start, walk_start_info['name'], len(neighbors))
                 return None
 
