@@ -11,7 +11,7 @@ import numpy as np
     v_embedding: Embedding for neighbor words.
 """
 def load_augmentive_features(nodes):
-    PICKLE_PATH = "./input/node2fp_revised_1120.pickle"
+    PICKLE_PATH = "./input/node2fp_revised_1113.pickle"
     print("Loading Chemical Vectors from ", PICKLE_PATH)
     with open(PICKLE_PATH, "rb") as handle:
         binary_dict = pickle.load(handle)
@@ -110,10 +110,10 @@ class SkipGramModelAux(SkipGramModel):
         self.print_network(self.decoder, "decoder")
 
         initrange = 1 / self.emb_size
-        init.uniform_(self.u_embeddings.weight.data, -initrange, initrange)
-        # nn.init.sparse_(self.u_embeddings.weight.data, sparsity=0.66, std=0.001)
-        nn.init.constant_(self.v_embeddings.weight.data, 0)
-        # nn.init.sparse_(self.v_embeddings.weight.data, sparsity=0.66, std=0.001)
+        # init.uniform_(self.u_embeddings.weight.data, -initrange, initrange)
+        nn.init.sparse_(self.u_embeddings.weight.data, sparsity=0.66, std=0.001)
+        # nn.init.constant_(self.v_embeddings.weight.data, 0)
+        nn.init.sparse_(self.v_embeddings.weight.data, sparsity=0.66, std=0.001)
         nn.init.sparse_(self.encoder.weight.data, sparsity=0.66, std=0.001)
         nn.init.sparse_(self.decoder.weight.data, sparsity=0.66, std=0.001)
 

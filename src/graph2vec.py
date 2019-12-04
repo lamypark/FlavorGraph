@@ -82,7 +82,13 @@ class Metapath2Vec:
             print("\n\n\nIteration: " + str(iteration + 1))
             # Temporary Fix!
             if self.aux_mode:
-                optimizer = optim.Adam(self.skip_gram_model.parameters(), lr=self.initial_lr)
+                u = self.skip_gram_model.u_embeddings.weight
+                v = self.skip_gram_model.v_embeddings.weight
+                e = self.skip_gram_model.encoder.weight
+                d = self.skip_gram_model.decoder.weight
+                optimizer = optim.Adam([u, v], lr=self.initial_lr)
+                aux_optimizer = optim.Adam([e, d], lr=0.001)
+                aux_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(aux_optimizer, len(self.dataloader))
             else:
                 optimizer = optim.SparseAdam(self.skip_gram_model.parameters(), lr=self.initial_lr)
             scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, len(self.dataloader))
@@ -96,12 +102,15 @@ class Metapath2Vec:
 
                     scheduler.step()
                     optimizer.zero_grad()
+                    if self.aux_mode:
+                        aux_scheduler.step()
+                        aux_optimizer.zero_grad()
 
                     loss = self.skip_gram_model.forward(pos_u, pos_v, neg_v)
                     loss.backward()
-                    # print(self.skip_gram_model.encoder[0].weight.grad)
-                    # print(self.skip_gram_model.u_embeddings.weight.grad)
                     optimizer.step()
+                    if self.aux_mode:
+                        aux_optimizer.step()
 
                     running_loss = running_loss * 0.9 + loss.item() * 0.1
                     if i > 0 and i % 300 == 0:
