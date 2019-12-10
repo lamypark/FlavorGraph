@@ -102,7 +102,7 @@ class SkipGramModelAux(SkipGramModel):
         self.encoder = nn.Linear(self.emb_dimension, self.aug_dimension)
         self.a_embeddings = nn.Embedding(self.emb_size, self.aug_dimension)
         self.a_embeddings.weight = nn.Parameter(self.aug_embeddings, requires_grad=False)
-        self.decoder = nn.Linear(self.aug_dimension, self.emb_dimension)
+        # self.decoder = nn.Linear(self.aug_dimension, self.emb_dimension)
 
         self.print_network(self.u_embeddings, "u_embeddings")
         self.print_network(self.encoder, "encoder")
@@ -110,10 +110,10 @@ class SkipGramModelAux(SkipGramModel):
         self.print_network(self.decoder, "decoder")
 
         initrange = 1 / self.emb_size
-        # init.uniform_(self.u_embeddings.weight.data, -initrange, initrange)
-        nn.init.sparse_(self.u_embeddings.weight.data, sparsity=0.66, std=0.001)
-        # nn.init.constant_(self.v_embeddings.weight.data, 0)
-        nn.init.sparse_(self.v_embeddings.weight.data, sparsity=0.66, std=0.001)
+        init.uniform_(self.u_embeddings.weight.data, -initrange, initrange)
+        # nn.init.sparse_(self.u_embeddings.weight.data, sparsity=0.66, std=0.001)
+        nn.init.constant_(self.v_embeddings.weight.data, 0)
+        # nn.init.sparse_(self.v_embeddings.weight.data, sparsity=0.66, std=0.001)
         nn.init.sparse_(self.encoder.weight.data, sparsity=0.66, std=0.001)
         nn.init.sparse_(self.decoder.weight.data, sparsity=0.66, std=0.001)
 
@@ -145,12 +145,12 @@ class SkipGramModelAux(SkipGramModel):
         aux_loss1 = criterion(aux_emb_u1, aux_emb_u2)
         aux_loss2 = criterion(aux_emb_v1, aux_emb_v2)
         aux_loss3 = criterion(aux_neg_v1, aux_neg_v2)
-        self.aux_loss = self.aux_coef * (aux_loss1 + aux_loss2 + aux_loss3)
+        self.aux_loss = aux_loss1 + aux_loss2 + aux_loss3
 
         # For Main Skip-Gram Loss
-        emb_u = self.decoder(emb_u)
-        emb_v = self.decoder(emb_v)
-        emb_neg_v = self.decoder(emb_neg_v)
+        # emb_u = self.decoder(emb_u)
+        # emb_v = self.decoder(emb_v)
+        # emb_neg_v = self.decoder(emb_neg_v)
 
         score = torch.sum(torch.mul(emb_u, emb_v), dim=1)
         score = torch.clamp(score, max=10, min=-10)
@@ -160,7 +160,7 @@ class SkipGramModelAux(SkipGramModel):
         neg_score = torch.clamp(neg_score, max=10, min=-10)
         neg_score = -torch.sum(F.logsigmoid(-neg_score), dim=1)
 
-        return torch.mean(score + neg_score) +  self.aux_loss
+        return torch.mean(score + neg_score) + (self.aux_coef * self.aux_loss)
 
     def print_network(self, model, name):
         """Print out the network information."""
