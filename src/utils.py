@@ -31,8 +31,8 @@ def graph_reader(input_nodes, input_edges):
         if edge_type == 'ingr-ingr':
             graph_ingr_only.add_edge(id_1, id_2, weight=score, type=edge_type)
 
-    graph.remove_edges_from(graph.selfloop_edges())
-    graph_ingr_only.remove_edges_from(graph.selfloop_edges())
+    #graph.remove_edges_from(graph.selfloop_edges())
+    #graph_ingr_only.remove_edges_from(graph.selfloop_edges())
 
     print("\nThe whole graph - ingredients, food-like compounds, drug-like compounds")
     print("# of nodes in graph: %d" % nx.number_of_nodes(graph))

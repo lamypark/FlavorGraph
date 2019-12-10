@@ -7,7 +7,7 @@ import networkx as nx
 import seaborn as sns
 import itertools
 import datetime
-import plotly.plotly as py
+import chart_studio.plotly as py
 import plotly.offline as offline
 import plotly.graph_objs as go
 from datetime import datetime

@@ -4,7 +4,6 @@ import itertools
 import numpy as np
 from tqdm import tqdm
 import networkx as nx
-from gensim.models import Word2Vec
 
 class MetaPathWalker(object):
     """
