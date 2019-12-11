@@ -85,9 +85,8 @@ class Metapath2Vec:
                 u = self.skip_gram_model.u_embeddings.weight
                 v = self.skip_gram_model.v_embeddings.weight
                 e = self.skip_gram_model.encoder.weight
-                d = self.skip_gram_model.decoder.weight
                 optimizer = optim.Adam([u, v], lr=self.initial_lr)
-                aux_optimizer = optim.Adam([e, d], lr=0.001)
+                aux_optimizer = optim.Adam([e], lr=0.003)
                 aux_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(aux_optimizer, len(self.dataloader))
             else:
                 optimizer = optim.SparseAdam(self.skip_gram_model.parameters(), lr=self.initial_lr)
