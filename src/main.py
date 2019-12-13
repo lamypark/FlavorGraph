@@ -29,8 +29,8 @@ def main():
     """
     2. Metapath2vec with MetaPathWalker - Ingredient-Ingredient / Ingredient-Food-like Compound / Ingredient-Drug-like Compound
     """
-    metapath2vec = Metapath2Vec(args, graph)
-    metapath2vec.train()
+    #metapath2vec = Metapath2Vec(args, graph)
+    #metapath2vec.train()
 
     """
     3. Plot your embedding if you like

@@ -19,55 +19,56 @@ def plot_embedding(args, graph, mode=None):
     Plot Embedding
     """
     print("\nPlot Embedding...")
-    node2ingr={}
-    ingr2type={}
+    node2node_name={}
+    node_name2is_hub={}
     for node in graph.nodes():
         node_info = graph.nodes[node]
-        node_name = str(node_info['name'])+"_"+str(node)
-        node2ingr[node] = node_name
+        node_name = node_info['name']
+        node2node_name[node] = node_name
+        node_name2is_hub[node_name] = node_info['is_hub']
 
-        if node_info['type'] == 'ingredient':
-            ingr2type[node_name] = node_info['type']
-        elif node_info['type'] == 'compound':
-            ingr2type[node_name] = node_info['is_hub']
-        else:
-            print("Type Error")
-
-    file = "{}{}-embedding_{}-metapath_{}-dim_{}-initial_lr_{}-window_size_{}-iterations_{}-min_count-_{}-isCSP_{}-CSPcoef_.pickle".format(
+    file = "{}{}-embedding_{}-metapath_{}-dim_{}-initial_lr_{}-window_size_{}-iterations_{}-min_count-_{}-isCSP_{}-CSPcoef.pickle".format(
                         args.output_path, args.idx_embed, args.idx_metapath, args.dim, args.initial_lr, args.window_size, args.iterations, args.min_count, args.CSP_train, args.CSP_coef)
 
     with open(file, "rb") as pickle_file:
         vectors = pickle.load(pickle_file)
-
-    print(len(vectors))
-
-    node2vec = {}
+    node_name2vec = {}
     for node in vectors:
-        node2vec[int(node)] = vectors[node]
-        #print(node)
-
-    # TSNE of node2vec
-    node2vec_tsne = load_TSNE(node2vec, dim=2)
+        node_name = node2node_name[int(node)]
+        node_name2vec[node_name] = vectors[node]
+        
+    # TSNE    
+    node_name2vec_tsne = load_TSNE(node_name2vec, dim=2)
+        
+    # SAVE
     save_path = file
-    plot_category(node2vec, node2vec_tsne, save_path, node2ingr, ingr2type, True)
+    plot_category(node_name2vec, node_name2vec_tsne, save_path, node2node_name, node_name2is_hub, True)
 
     # For Binary Vectors
     if args.CSP_train:
-        file = file.replace('.pickle', 'CSPLayer.pickle')
+        file = file.replace('.pickle', '_CSPLayer.pickle')
         with open(file, "rb") as pickle_file:
             vectors = pickle.load(pickle_file)
-            node2vec = {}
+        node_name2vec = {}
         for node in vectors:
-            node2vec[int(node)] = vectors[node]
-        node2vec_tsne = load_TSNE(node2vec, dim=2)
+            node_name = node2node_name[int(node)]
+            node_name2vec[node_name] = vectors[node]
+            
+        # TSNE    
+        node_name2vec_tsne = load_TSNE(node_name2vec, dim=2)
+        
+        # SAVE
         save_path = file
-        plot_category(node2vec, node2vec_tsne, save_path, node2ingr, ingr2type, True)
+        plot_category(node_name2vec, node_name2vec_tsne, save_path, node2node_name, node_name2is_hub, True)
     return
 
-def plot_category(node2vec, node2vec_tsne, path, node2name, node2is_hub, withLegends=False):
+def plot_category(node_name2vec, node_name2vec_tsne, path, node2node_name, node_name2is_hub, withLegends=False):
     #Label Load
+    
+    #print(node2is_hub)
+    
     labels = []
-    for label in node2vec:
+    for label in node_name2vec:
         labels.append(label)
 
     #Legend Load
@@ -75,21 +76,20 @@ def plot_category(node2vec, node2vec_tsne, path, node2name, node2is_hub, withLeg
         categories = []
         for label in labels:
             try:
-                if node2is_hub[label] == 'hub':
+                if node_name2is_hub[label] == 'hub':
                     categories.append('Hub_Ingredient')
-                elif node2is_hub[label] == 'no_hub':
+                elif node_name2is_hub[label] == 'no_hub':
                     categories.append('Non_hub_Ingredient')
-                elif node2is_hub[label] == 'food':
+                elif node_name2is_hub[label] == 'food':
                     categories.append('Food_like_Compound')
-                elif node2is_hub[label] == 'drug':
+                elif node_name2is_hub[label] == 'drug':
                     categories.append('Drug_like_Compound')
                 else:
                     print(label)
             except KeyError:
-                #print(label)
+                print(label)
                 categories.append("None")
         categories_color = list(set(categories))
-        print(categories_color)
 
         category2color = {
         'Hub_Ingredient' :  sns.xkcd_rgb["orange"],
@@ -123,7 +123,7 @@ def plot_category(node2vec, node2vec_tsne, path, node2name, node2is_hub, withLeg
         category_order = ['Non_hub_Ingredient', 'Food_like_Compound', 'Drug_like_Compound', 'Hub_Ingredient']
 
         make_plot_with_labels_legends(name=path,
-        points=node2vec_tsne,
+        points=node_name2vec_tsne,
         labels=labels,
         label_to_plot=label2plot,
         legend_labels=categories,

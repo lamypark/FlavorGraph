@@ -46,8 +46,6 @@ def parameter_parser():
     # how many repeated 'metapaths' for a walk
     parser.add_argument('--num_metapaths', default=5, type=int, help="number of metapaths")
 
-
-
     # Pytorch
     parser.add_argument("--seed",
                         type = int,

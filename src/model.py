@@ -201,5 +201,5 @@ class SkipGramModelAux(SkipGramModel):
                 print("Something wrong with encoder?", w)
         with open(file_name, "wb") as handle:
             pickle.dump(embed_dict, handle)
-        with open(file_name.replace('.pickle', '_binary.pickle'), "wb") as handle:
+        with open(file_name.replace('.pickle', '_CSPLayer.pickle'), "wb") as handle:
             pickle.dump(binary_dict, handle)

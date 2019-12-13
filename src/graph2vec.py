@@ -51,7 +51,7 @@ class Metapath2Vec:
         # 4. initialize dataloader
         self.dataloader = DataLoader(dataset, batch_size=args.batch_size,
                                      shuffle=True, num_workers=args.num_workers, collate_fn=dataset.collate)
-        self.output_file_name = "{}{}-embedding_{}-metapath_{}-dim_{}-initial_lr_{}-window_size_{}-iterations_{}-min_count-_{}-isCSP_{}-CSPcoef_.pickle".format(
+        self.output_file_name = "{}{}-embedding_{}-metapath_{}-dim_{}-initial_lr_{}-window_size_{}-iterations_{}-min_count-_{}-isCSP_{}-CSPcoef.pickle".format(
                             args.output_path, args.idx_embed, args.idx_metapath, args.dim, args.initial_lr, args.window_size, args.iterations, args.min_count, args.CSP_train, args.CSP_coef)
         self.emb_size = len(self.data.word2id)
         self.emb_dimension = args.dim
