@@ -110,9 +110,9 @@ class Metapath2Vec:
                     optimizer.step()
                     if self.aux_mode:
                         aux_optimizer.step()
-
                     running_loss = running_loss * 0.9 + loss.item() * 0.1
-                    if i > 0 and i % 300 == 0:
+                    
+                    if i > 0 and i % int(len(self.dataloader)/3) == 0:
                         print(" Loss: " + str(running_loss))
                         if self.aux_mode:
                             print(" Auxiliary Loss: " + str(self.skip_gram_model.aux_loss.item()))

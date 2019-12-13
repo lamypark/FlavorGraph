@@ -34,7 +34,7 @@ class DataReader:
                         self.token_count += 1
                         word_frequency[word] = word_frequency.get(word, 0) + 1
 
-                        if self.token_count % 100000 == 0:
+                        if self.token_count % 1000000 == 0:
                             print("Read " + str(int(self.token_count)) + " words.")
 
         wid = 0
