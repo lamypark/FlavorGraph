@@ -62,12 +62,11 @@ class MetaPathWalker(object):
             # num walks (rows)
             for _ in range(num_walks):
                 # num metapaths (columns)
+                if self.enable_chemical_walk:
+                    walk = self.chemical_walk(node)
+                    if walk is not None:
+                        walks.append(walk)
                 for _ in range(args.num_metapaths):
-                    if self.enable_chemical_walk:
-                        walk = self.chemical_walk(node)
-                        if walk is not None:
-                            walks.append(walk)
-
                     if meta_paths is not None:
                         for meta_path in meta_paths:
                             walk = self.meta_walk(node, meta_path)
@@ -77,7 +76,11 @@ class MetaPathWalker(object):
         print("Number of MetaPath Walks Created: {}".format(len(walks)))
         walks = list(walk for walk,_ in itertools.groupby(sorted(walks)))
         print("Filterd Number of MetaPath Walks: {}".format(len(walks)))
-        #random.shuffle(walks)
+        
+        print(walks[:10])
+        random.shuffle(walks)
+        print(walks[:10])
+        print("MetaPath Walks: {}".format(len(walks)))
 
         file = "{}{}-metapath_{}-whichmeta_{}-num_walks_{}-len_metapath_{}-num_metapaths.txt".format(args.input_path_metapaths, args.idx_metapath, args.which_metapath, args.num_walks, args.len_metapath, args.num_metapaths)
         with open(file, "w") as fw:
