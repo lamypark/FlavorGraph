@@ -36,15 +36,13 @@ def parameter_parser():
     parser.add_argument('--CSP_coef', default=0.001, type=float)
 
     # Metapath2vec - MetapathWalker
-    parser.add_argument('--idx_metapath', default="M8", type=str)
+    parser.add_argument('--idx_metapath', default="M11", type=str)
     # combination of metapaths?
-    parser.add_argument('--which_metapath', default="HC_CH+CHNH+NHCH", type=str)
-    # how many repeated 'walks' for a node
-    parser.add_argument('--num_walks', default=20, type=int, help="number of walks")
+    parser.add_argument('--which_metapath', default="CHC+CHNHC+NHCHN", type=str)
+    # how many repeated 'walks' per node
+    parser.add_argument('--num_walks', default=1000, type=int, help="number of walks")
     # metapath how long? (e.g., HC_CH+CHNH+NHCH * len_metapath)
-    parser.add_argument('--len_metapath', default=3, type=int, help="length of metapath")
-    # how many repeated 'metapaths' for a walk
-    parser.add_argument('--num_metapaths', default=3, type=int, help="number of metapaths")
+    parser.add_argument('--len_metapath', default=30, type=int, help="length of metapath")
 
     # Pytorch
     parser.add_argument("--seed",

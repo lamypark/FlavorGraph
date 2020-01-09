@@ -97,16 +97,16 @@ class SkipGramModelAux(SkipGramModel):
         self.aux_loss = 0.0
 
         self.aug_embeddings, self.aug_dimension, self.binary_masks = load_augmentive_features(nodes)
-        
+
         # |V| x |d|
         self.u_embeddings = nn.Embedding(self.emb_size, self.emb_dimension)
-        
+
         # |V| x |d|
         self.v_embeddings = nn.Embedding(self.emb_size, self.emb_dimension)
-        
+
         # |d| x |881|
         self.encoder = nn.Linear(self.emb_dimension, self.aug_dimension)
-        
+
         # |d| x |881|
         self.a_embeddings = nn.Embedding(self.emb_size, self.aug_dimension)
         self.a_embeddings.weight = nn.Parameter(self.aug_embeddings, requires_grad=False)
@@ -193,6 +193,7 @@ class SkipGramModelAux(SkipGramModel):
                 embed_dict[w] = embedding[wid]
             except:
                 print(w)
+
             try:
                 x = np.matmul(transform, embedding[wid])
                 binary_dict[w] = x
