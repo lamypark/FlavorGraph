@@ -118,7 +118,6 @@ class Metapath2Vec:
                             print(" Auxiliary Loss: " + str(self.skip_gram_model.aux_loss.item()))
 
         self.skip_gram_model.save_embedding(self.data.id2word, self.output_file_name)
-        self.skip_gram_model.evaluate(self.graph, self.data.word2id)
 
 class Node2Vec:
     def __init__(self, args, graph):
