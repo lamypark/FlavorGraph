@@ -36,16 +36,16 @@ def plot_embedding(args, graph, mode=None):
     for node in vectors:
         node_name = node2node_name[int(node)]
         node_name2vec[node_name] = vectors[node]
-        
-    # TSNE    
+
+    # TSNE
     node_name2vec_tsne = load_TSNE(node_name2vec, dim=2)
-        
+
     # SAVE
     save_path = file
     plot_category(node_name2vec, node_name2vec_tsne, save_path, node2node_name, node_name2is_hub, True)
 
     # For Binary Vectors
-    if args.CSP_train:
+    if args.CSP_save:
         file = file.replace('.pickle', '_CSPLayer.pickle')
         with open(file, "rb") as pickle_file:
             vectors = pickle.load(pickle_file)
@@ -53,10 +53,10 @@ def plot_embedding(args, graph, mode=None):
         for node in vectors:
             node_name = node2node_name[int(node)]
             node_name2vec[node_name] = vectors[node]
-            
-        # TSNE    
+
+        # TSNE
         node_name2vec_tsne = load_TSNE(node_name2vec, dim=2)
-        
+
         # SAVE
         save_path = file
         plot_category(node_name2vec, node_name2vec_tsne, save_path, node2node_name, node_name2is_hub, True)
@@ -64,9 +64,9 @@ def plot_embedding(args, graph, mode=None):
 
 def plot_category(node_name2vec, node_name2vec_tsne, path, node2node_name, node_name2is_hub, withLegends=False):
     #Label Load
-    
+
     #print(node2is_hub)
-    
+
     labels = []
     for label in node_name2vec:
         labels.append(label)
@@ -98,28 +98,28 @@ def plot_category(node_name2vec, node_name2vec_tsne, path, node2node_name, node_
         'Drug_like_Compound'  : sns.xkcd_rgb["green"],
         'None'  : sns.xkcd_rgb["black"]
         }
-        
+
         category2marker = {
         'Hub_Ingredient' : 'diamond-x',
         'Non_hub_Ingredient' : 'square',
         'Food_like_Compound' : 'circle',
         'Drug_like_Compound' : 'circle'
         }
-        
+
         category2size = {
         'Hub_Ingredient' : 14,
         'Non_hub_Ingredient' : 8,
         'Food_like_Compound' : 8,
         'Drug_like_Compound' : 9
         }
-        
+
         label2plot = {
         'Hub_Ingredient' : 50,
         'Non_hub_Ingredient' : 100,
         'Food_like_Compound' : 100,
         'Drug_like_Compound' : 50
         }
-        
+
         category_order = ['Non_hub_Ingredient', 'Food_like_Compound', 'Drug_like_Compound', 'Hub_Ingredient']
 
         make_plot_with_labels_legends(name=path,
@@ -227,7 +227,7 @@ def make_plot_with_labels_legends(name, points, labels, label_to_plot, legend_la
     full = sorted(lst, key=lambda x: x[2])
     traces = []
     annotations = []
-    
+
     for legend_label, group in itertools.groupby(full, lambda x: x[2]):
         group_points = []
         group_labels = []
@@ -235,7 +235,7 @@ def make_plot_with_labels_legends(name, points, labels, label_to_plot, legend_la
             point, label, _ = tup
             group_points.append(point)
             group_labels.append(label)
-            
+
         # label, legend_label
         # markers
         group_points = np.stack(group_points)
@@ -258,11 +258,11 @@ def make_plot_with_labels_legends(name, points, labels, label_to_plot, legend_la
             name = legend_label
         )
         )
-        
+
         res = random.sample(range(1, len(group_points)), label_to_plot[legend_label])
         sampled_group_points = [group_points[i] for i in res]
         sampled_group_labels = [group_labels[i] for i in res]
-            
+
         for point, label in zip(sampled_group_points, sampled_group_labels):
             annotations.append(go.layout.Annotation(
                 x=point[0],
@@ -319,7 +319,7 @@ def make_plot_with_labels_legends(name, points, labels, label_to_plot, legend_la
             showticklabels=False
         ),
         annotations=annotations,
-        title='FlavorNet2.0',   
+        title='FlavorNet2.0',
         font=dict(size=12),
         showlegend=True,
         autosize=True,

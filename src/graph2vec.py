@@ -64,7 +64,7 @@ class Metapath2Vec:
         if args.CSP_train:
             print("\n\n#####################################")
             print("### SkipGram with CSP")
-            self.skip_gram_model = SkipGramModelAux(self.emb_size, self.emb_dimension, nodes=self.data.id2word, aux_coef=self.aux_coef)
+            self.skip_gram_model = SkipGramModelAux(self.emb_size, self.emb_dimension, nodes=self.data.id2word, aux_coef=self.aux_coef, CSP_save=args.CSP_save)
         else:
             print("\n\n#####################################")
             print("### SkipGram Normal")

@@ -81,9 +81,12 @@ def evaluate(args, graph):
     for category in categories:
         ingredients = df[category].values
         for name in ingredients:
-            vec = node_name2vec[name]
-            X.append(vec)
-            y.append(category)
+            try:
+                vec = node_name2vec[name]
+                X.append(vec)
+                y.append(category)
+            except:
+                print(name)
 
 
     train_ratios = [0.2, 0.4, 0.6, 0.8]
@@ -92,7 +95,7 @@ def evaluate(args, graph):
         train(X, y, ratio)
 
     # For Binary Vectors
-    if args.CSP_train:
+    if args.CSP_save:
         file = file.replace('.pickle', '_CSPLayer.pickle')
         with open(file, "rb") as pickle_file:
             vectors = pickle.load(pickle_file)

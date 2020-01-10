@@ -89,12 +89,13 @@ class SkipGramModel(nn.Module):
 
 
 class SkipGramModelAux(SkipGramModel):
-    def __init__(self, emb_size, emb_dimension, nodes=None, aux_coef=0.0001):
+    def __init__(self, emb_size, emb_dimension, nodes=None, aux_coef=0.0001, CSP_save=False):
         super(SkipGramModelAux, self).__init__(emb_size, emb_dimension)
         self.emb_size = emb_size                # row / # of vocab size / 8298
         self.emb_dimension = emb_dimension      # column / user-defined vector dimension / 128
         self.aux_coef = aux_coef
         self.aux_loss = 0.0
+        self.CSP_save = CSP_save
 
         self.aug_embeddings, self.aug_dimension, self.binary_masks = load_augmentive_features(nodes)
 
@@ -183,24 +184,23 @@ class SkipGramModelAux(SkipGramModel):
         embed_dict = dict()
         binary_dict = dict()
         embedding = self.u_embeddings.weight.cpu().data.numpy()
-        try:
-            transform = self.encoder.weight.cpu().data.numpy()
-        except Exception as e:
-            print(e)
-
         for wid, w in id2word.items():
             try:
                 embed_dict[w] = embedding[wid]
             except:
                 print(w)
-
-            try:
-                x = np.matmul(transform, embedding[wid])
-                binary_dict[w] = x
-            except Exception as e:
-                print(e)
-                print("Something wrong with encoder?", w)
         with open(file_name, "wb") as handle:
             pickle.dump(embed_dict, handle)
-        with open(file_name.replace('.pickle', '_CSPLayer.pickle'), "wb") as handle:
-            pickle.dump(binary_dict, handle)
+
+        if self.CSP_save:
+            transform = self.encoder.weight.cpu().data.numpy()
+            for wid, w in id2word.items():
+                try:
+                    x = np.matmul(transform, embedding[wid])
+                    binary_dict[w] = x
+                except Exception as e:
+                    print(e)
+                    print("Something wrong with encoder?", w)
+
+            with open(file_name.replace('.pickle', '_CSPLayer.pickle'), "wb") as handle:
+                pickle.dump(binary_dict, handle)

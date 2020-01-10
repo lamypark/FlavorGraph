@@ -79,34 +79,43 @@ class MetaPathWalker(object):
         walk_start_is_hub = walk_start_info['is_hub']
 
         if walk_start_type == 'ingredient':
-            meta = walk_start_type+"+"+walk_start_is_hub
+            meta_start = walk_start_type+"+"+walk_start_is_hub
         else:
-            meta = walk_start_type
+            meta_start = walk_start_type
 
-        if meta != meta_path[0]:
+        if meta_start != meta_path[0]:
             return None
         else:
             meta_pos = 0
             walk = [walk_start]
+
+            #print("\n")
+            #print(meta_path)
+
             while len(walk) < args.len_metapath:
                 meta_pos += 1
                 # retreive the neighbors of last walk
                 walk_current = walk[-1]
                 neighbors = list(nx.neighbors(self.graph, walk_current))
-                # if only one neighbor, break.
+                # if no neighbor, break.
                 if len(neighbors) < 1:
                     break
                 # filter neighbor according to current meta_path
-                filtered_neighbors = self.filter_neighbors(neighbors, meta_path[ meta_pos%len(meta_path)-1 ])
+                meta = meta_path[ meta_pos%len(meta_path) ]
+                #print("meta_pos:", meta_pos)
+                #print("current meta:", meta)
+                filtered_neighbors = self.filter_neighbors(neighbors, meta)
+                #print("filtered_neighbors:", filtered_neighbors)
+
                 if len(filtered_neighbors) < 1:
                     break
                 walk = walk + [random.sample(filtered_neighbors, 1)[0]]
+        #print("complete walk:", walk)
 
-        #return walk
-        #if len(list(set(walk))) > 5:
-        #    return walk
-        #else:
-        return walk
+        if len(walk) > 1:
+            return walk
+        else:
+            return None
 
     def filter_neighbors(self, neighbors, meta):
         filtered = []
