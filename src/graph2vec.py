@@ -8,7 +8,7 @@ import numpy as np
 import pickle
 import os
 from dataloader import DataReader, DatasetLoader
-from walkers import MetaPathWalker
+from walkers import MetaPathWalker, DeepWalker
 from model import SkipGramModel, SkipGramModelAux
 
 
@@ -19,15 +19,15 @@ class Metapath2Vec:
         # 1. generate walker
         walker = MetaPathWalker(args, graph)
 
-        files = os.listdir(args.input_path_metapaths)
+        files = os.listdir(args.input_path)
         is_file = False
         for file in files:
-            fullFilename = os.path.join(args.input_path_metapaths, file)
+            fullFilename = os.path.join(args.input_path, file)
             # if file exists, load the file.
             if file.startswith(args.idx_metapath):
                 is_file = True
                 print("\n !!! Found the file that you have specified...")
-                self.inputFileName = "{}{}-metapath_{}-whichmeta_{}-num_walks_{}-len_metapath.txt".format(args.input_path_metapaths, args.idx_metapath, args.which_metapath, args.num_walks, args.len_metapath)
+                self.inputFileName = "{}{}-metapath_{}-whichmeta_{}-num_walks_{}-len_metapath.txt".format(args.input_path, args.idx_metapath, args.which_metapath, args.num_walks, args.len_metapath)
                 print("### Metapaths Loaded...", self.inputFileName)
 
         # if file does not exists, create the new one.
@@ -36,7 +36,7 @@ class Metapath2Vec:
             print("### Creating new Metapaths...")
             self.metapaths = walker.generate_metapaths(args)
             walker.create_metapath_walks(args, args.num_walks, self.metapaths)
-            self.inputFileName = "{}{}-metapath_{}-whichmeta_{}-num_walks_{}-len_metapath.txt".format(args.input_path_metapaths, args.idx_metapath, args.which_metapath, args.num_walks, args.len_metapath)
+            self.inputFileName = "{}{}-metapath_{}-whichmeta_{}-num_walks_{}-len_metapath.txt".format(args.input_path, args.idx_metapath, args.which_metapath, args.num_walks, args.len_metapath)
             print("### Metapaths Loaded...", self.inputFileName)
 
         # 2. read data
@@ -125,10 +125,9 @@ class Node2Vec:
         # 1. generate walker
         walker = DeepWalker(args, graph)
         print("\nDoing deepwalks...\n")
-        if not args.skip_paths:
-            walker.create_deepwalk_paths()
+        walker.create_features()
 
-        self.inputFileName = "{}deepwalk_{}-whichmeta_{}-num_walks_{}-len_walk_{}-dim.txt".format(args.input_path_deepwalkpaths, args.which_deepwalk, args.num_walks_deepwalk, args.len_deepwalk, args.dim)
+        self.inputFileName = "{}{}-deepwalk_{}-num_walks_{}-len_metapath.txt".format(args.input_path, args.idx_metapath, args.number_of_walks, args.walk_length)
 
         # 2. read data
         self.data = DataReader(args.min_count, args.care_type, self.inputFileName)
@@ -140,14 +139,14 @@ class Node2Vec:
         self.dataloader = DataLoader(dataset, batch_size=args.batch_size,
                                      shuffle=True, num_workers=args.num_workers, collate_fn=dataset.collate)
 
-        self.output_file_name = "{}embedding_deepwalk_{}-whichmeta_{}-num_walks_{}-len_walk_{}-dim.pickle".format(args.output_path, args.which_deepwalk, args.num_walks_deepwalk, args.len_deepwalk, args.dim)
-        #self.output_file_name = self.inputFileName.replace("deepwalk", "embedding_deepwalk").replace("txt", "pickle")
+        self.output_file_name = "{}{}-embedding_{}-deepwalk_{}-dim_{}-initial_lr_{}-window_size_{}-iterations_{}-min_count.pickle".format(
+                            args.output_path, args.idx_embed, args.idx_metapath, args.dim, args.initial_lr, args.window_size, args.iterations, args.min_count)
         self.emb_size = len(self.data.word2id)
         self.emb_dimension = args.dim
         self.batch_size = args.batch_size
         self.iterations = args.iterations
         self.initial_lr = args.initial_lr
-        self.skip_gram_model = SkipGramModel(self.emb_size, self.emb_dimension, pretrained_weights=None, is_metapath=False)
+        self.skip_gram_model = SkipGramModel(self.emb_size, self.emb_dimension)
 
         self.use_cuda = torch.cuda.is_available()
         self.device = torch.device("cuda" if self.use_cuda else "cpu")

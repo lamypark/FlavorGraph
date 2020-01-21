@@ -65,8 +65,12 @@ def evaluate(args, graph):
     df = pd.read_csv(csv)
     categories = df.columns
 
-    file = "{}{}-embedding_{}-metapath_{}-dim_{}-initial_lr_{}-window_size_{}-iterations_{}-min_count-_{}-isCSP_{}-CSPcoef.pickle".format(
-                        args.output_path, args.idx_embed, args.idx_metapath, args.dim, args.initial_lr, args.window_size, args.iterations, args.min_count, args.CSP_train, args.CSP_coef)
+    if args.idx_embed == 'Node2vec':
+        file = "{}{}-embedding_{}-deepwalk_{}-dim_{}-initial_lr_{}-window_size_{}-iterations_{}-min_count.pickle".format(
+                            args.output_path, args.idx_embed, args.idx_metapath, args.dim, args.initial_lr, args.window_size, args.iterations, args.min_count)
+    else:
+        file = "{}{}-embedding_{}-metapath_{}-dim_{}-initial_lr_{}-window_size_{}-iterations_{}-min_count-_{}-isCSP_{}-CSPcoef.pickle".format(
+                            args.output_path, args.idx_embed, args.idx_metapath, args.dim, args.initial_lr, args.window_size, args.iterations, args.min_count, args.CSP_train, args.CSP_coef)
 
     with open(file, "rb") as pickle_file:
         vectors = pickle.load(pickle_file)
@@ -161,7 +165,7 @@ def train(X, y, train_ratio):
     import nltk
 
     NUM_CLUSTERS=8
-    kclusterer = KMeansClusterer(NUM_CLUSTERS, distance=nltk.cluster.util.cosine_distance, repeats=25)
+    kclusterer = KMeansClusterer(NUM_CLUSTERS, distance=nltk.cluster.util.cosine_distance, repeats=25, avoid_empty_clusters=True)
     assigned_clusters = kclusterer.cluster(X, assign_clusters=True)
     #set(assigned_clusters)
     nmi = normalized_mutual_info_score(assigned_clusters, y)

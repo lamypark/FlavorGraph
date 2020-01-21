@@ -27,8 +27,12 @@ def plot_embedding(args, graph, mode=None):
         node2node_name[node] = node_name
         node_name2is_hub[node_name] = node_info['is_hub']
 
-    file = "{}{}-embedding_{}-metapath_{}-dim_{}-initial_lr_{}-window_size_{}-iterations_{}-min_count-_{}-isCSP_{}-CSPcoef.pickle".format(
-                        args.output_path, args.idx_embed, args.idx_metapath, args.dim, args.initial_lr, args.window_size, args.iterations, args.min_count, args.CSP_train, args.CSP_coef)
+    if args.idx_embed == 'Node2vec':
+        file = "{}{}-embedding_{}-deepwalk_{}-dim_{}-initial_lr_{}-window_size_{}-iterations_{}-min_count.pickle".format(
+                            args.output_path, args.idx_embed, args.idx_metapath, args.dim, args.initial_lr, args.window_size, args.iterations, args.min_count)
+    else:
+        file = "{}{}-embedding_{}-metapath_{}-dim_{}-initial_lr_{}-window_size_{}-iterations_{}-min_count-_{}-isCSP_{}-CSPcoef.pickle".format(
+                            args.output_path, args.idx_embed, args.idx_metapath, args.dim, args.initial_lr, args.window_size, args.iterations, args.min_count, args.CSP_train, args.CSP_coef)
 
     with open(file, "rb") as pickle_file:
         vectors = pickle.load(pickle_file)

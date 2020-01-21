@@ -66,7 +66,7 @@ class MetaPathWalker(object):
         #print(walks[:10])
         print("MetaPath Walks: {}".format(len(walks)))
 
-        file = "{}{}-metapath_{}-whichmeta_{}-num_walks_{}-len_metapath.txt".format(args.input_path_metapaths, args.idx_metapath, args.which_metapath, args.num_walks, args.len_metapath)
+        file = "{}{}-metapath_{}-whichmeta_{}-num_walks_{}-len_metapath.txt".format(args.input_path, args.idx_metapath, args.which_metapath, args.num_walks, args.len_metapath)
         with open(file, "w") as fw:
             for walk in walks:
                 for node in walk:
@@ -140,7 +140,7 @@ class DeepWalker(object):
     Paper: https://arxiv.org/abs/1403.6652
     Video: https://www.youtube.com/watch?v=aZNtHJwfIVg
     """
-    def __init__(self, graph, args):
+    def __init__(self, args, graph):
         """
         :param graph: NetworkX graph.
         :param args: Arguments object.
@@ -181,11 +181,20 @@ class DeepWalker(object):
         """
         Creating random walks from each node.
         """
-        self.paths = []
+        self.paths = []        
         for node in tqdm(self.graph.nodes()):
             for k in range(self.args.number_of_walks):
                 walk = self.weighted_small_walk(node)
                 self.paths.append(walk)
+                
+        print("# of DeepWalks: {}".format(len(self.paths)))
+
+        file = "{}{}-deepwalk_{}-num_walks_{}-len_metapath.txt".format(self.args.input_path, self.args.idx_metapath, self.args.number_of_walks, self.args.walk_length)
+        with open(file, "w") as fw:
+            for walk in self.paths:
+                for node in walk:
+                    fw.write("{} ".format(node))
+                fw.write("\n")
 
     def learn_base_embedding(self):
         """
