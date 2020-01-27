@@ -33,7 +33,8 @@ class MetaPathWalker(object):
         if 'CHNHC' in args.which_metapath:
             print("# Metapath CHNHC")
             metapath_list = ['compound', 'ingredient+hub', 'ingredient+no_hub', 'ingredient+hub']
-            return_list.append(metapath_list)
+            for _ in range(3):
+                return_list.append(metapath_list)
 
         if 'NHCHN' in args.which_metapath:
             print("# Metapath NHCHN")

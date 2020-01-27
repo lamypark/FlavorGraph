@@ -111,20 +111,17 @@ class SkipGramModelAux(SkipGramModel):
         # |d| x |881|
         self.a_embeddings = nn.Embedding(self.emb_size, self.aug_dimension)
         self.a_embeddings.weight = nn.Parameter(self.aug_embeddings, requires_grad=False)
-        # self.decoder = nn.Linear(self.aug_dimension, self.emb_dimension)
 
         self.print_network(self.u_embeddings, "u_embeddings")
         self.print_network(self.encoder, "encoder")
         self.print_network(self.a_embeddings, "a_embeddings")
-        # self.print_network(self.decoder, "decoder")
 
-        initrange = 1 / self.emb_size
+        initrange = 1 / self.emb_dimension
         init.uniform_(self.u_embeddings.weight.data, -initrange, initrange)
         # nn.init.sparse_(self.u_embeddings.weight.data, sparsity=0.66, std=0.001)
         nn.init.constant_(self.v_embeddings.weight.data, 0)
         # nn.init.sparse_(self.v_embeddings.weight.data, sparsity=0.66, std=0.001)
         nn.init.sparse_(self.encoder.weight.data, sparsity=0.66, std=0.001)
-        # nn.init.sparse_(self.decoder.weight.data, sparsity=0.66, std=0.001)
 
     def forward(self, pos_u, pos_v, neg_v):
         emb_u = self.u_embeddings(pos_u)
@@ -137,30 +134,28 @@ class SkipGramModelAux(SkipGramModel):
 
         # For Chemical Structure Prediction Loss
         pos_u_masks = self.binary_masks[pos_u]
-        pos_v_masks = self.binary_masks[pos_v]
-        neg_v_masks = self.binary_masks[neg_v].reshape(-1, 5).reshape(-1)
+        #pos_v_masks = self.binary_masks[pos_v]
+        #neg_v_masks = self.binary_masks[neg_v].reshape(-1, 5).reshape(-1)
 
         aux_emb_u1 = emb_u[pos_u_masks.nonzero()[:, 0]]
         aux_emb_u2 = self.a_embeddings(pos_u)[pos_u_masks.nonzero()[:, 0]]
 
-        aux_emb_v1 = emb_v[pos_v_masks.nonzero()[:, 0]]
-        aux_emb_v2 = self.a_embeddings(pos_v)[pos_v_masks.nonzero()[:, 0]]
+        #aux_emb_v1 = emb_v[pos_v_masks.nonzero()[:, 0]]
+        #aux_emb_v2 = self.a_embeddings(pos_v)[pos_v_masks.nonzero()[:, 0]]
 
-        aux_neg_v1 = emb_neg_v.reshape(-1, 881)[neg_v_masks.nonzero()[:, 0]]
-        aux_neg_v2 = self.a_embeddings(neg_v).reshape(-1, 881)[neg_v_masks.nonzero()[:, 0]]
+        #aux_neg_v1 = emb_neg_v.reshape(-1, 881)[neg_v_masks.nonzero()[:, 0]]
+        #aux_neg_v2 = self.a_embeddings(neg_v).reshape(-1, 881)[neg_v_masks.nonzero()[:, 0]]
 
         criterion = nn.BCEWithLogitsLoss()
 
         aux_loss1 = criterion(aux_emb_u1, aux_emb_u2)
-        aux_loss2 = criterion(aux_emb_v1, aux_emb_v2)
-        aux_loss3 = criterion(aux_neg_v1, aux_neg_v2)
-        self.aux_loss = aux_loss1 + aux_loss2 + aux_loss3
-
+        #aux_loss2 = criterion(aux_emb_v1, aux_emb_v2)
+        #aux_loss3 = criterion(aux_neg_v1, aux_neg_v2)
+        
+        #self.aux_loss = aux_loss1 + aux_loss2 + aux_loss3
+        self.aux_loss = aux_loss1
+        
         # For Main Skip-Gram Loss
-        # emb_u = self.decoder(emb_u)
-        # emb_v = self.decoder(emb_v)
-        # emb_neg_v = self.decoder(emb_neg_v)
-
         score = torch.sum(torch.mul(emb_u, emb_v), dim=1)
         score = torch.clamp(score, max=10, min=-10)
         score = -F.logsigmoid(score)
@@ -169,7 +164,9 @@ class SkipGramModelAux(SkipGramModel):
         neg_score = torch.clamp(neg_score, max=10, min=-10)
         neg_score = -torch.sum(F.logsigmoid(-neg_score), dim=1)
 
-        return torch.mean(score + neg_score) + (self.aux_coef * self.aux_loss)
+        #return torch.mean(score + neg_score) + (self.aux_coef * self.aux_loss)
+        return torch.mean(score + neg_score + (self.aux_coef*self.aux_loss) )
+
 
     def print_network(self, model, name):
         """Print out the network information."""

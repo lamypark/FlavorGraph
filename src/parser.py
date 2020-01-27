@@ -49,7 +49,7 @@ def parameter_parser():
     parser.add_argument('--len_metapath', default=50, type=int, help="length of metapath")
 
     # CSP Layer
-    parser.add_argument('--CSP_train', default=True, action="store_true")
+    parser.add_argument('--CSP_train', default=False, action="store_true")
     parser.add_argument('--CSP_coef', default=0.0001, type=float)
     parser.add_argument('--CSP_save', default=False, action="store_true")
 

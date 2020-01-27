@@ -138,7 +138,7 @@ def train(X, y, train_ratio):
     Classification
     """
     #clf = LogisticRegression(C=1000.0, random_state=0).fit(X_train, y_train)
-    clf = svm.SVC(kernel='linear', C=1e20).fit(X_train, y_train)
+    clf = svm.SVC(kernel='linear', C=1e30).fit(X_train, y_train)
     y_pred = clf.predict(X_test)
 
     #print(y_test)
