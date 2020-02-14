@@ -19,6 +19,7 @@ class MetaPathWalker(object):
         """
         self.args = args
         self.graph = graph
+        self.rw = False
 
     def generate_metapaths(self, args):
         """
@@ -41,6 +42,10 @@ class MetaPathWalker(object):
             metapath_list = ['ingredient+no_hub', 'ingredient+hub', 'compound', 'ingredient+hub']
             return_list.append(metapath_list)
 
+        if 'RandWalk' in args.which_metapath:
+            print("# Random Walk Enabled")
+            self.rw = True
+
         if not return_list:
             return None
         else:
@@ -52,6 +57,11 @@ class MetaPathWalker(object):
         for node in tqdm(self.graph.nodes()):
             # num walks (rows)
             for _ in range(num_walks):
+                # Random Walk
+                if self.rw:
+                    walk = self.weighted_small_walk(node)
+                    
+                # Metapath
                 if meta_paths is not None:
                     for meta_path in meta_paths:
                         walk = self.meta_walk(args, node, meta_path)
@@ -134,6 +144,22 @@ class MetaPathWalker(object):
                 filtered.append(neighbor)
         return filtered
 
+    def weighted_small_walk(self, start_node):
+        """
+        Doing a truncated random walk.
+        :param start_node: Start node for random walk.
+        :return walk: Truncated random walk list of nodes with fixed maximal length.
+        """
+        walk = [start_node]
+        while len(walk) < self.args.walk_length:
+            current_node = walk[-1]
+            neighbors_of_end_node = list(nx.neighbors(self.graph,current_node))
+            if len(neighbors_of_end_node) == 0:
+                break
+            next_node = random.sample(neighbors_of_end_node,1)[0]
+            walk += [next_node]
+        return walk
+
 class DeepWalker(object):
     """
     DeepWalk node embedding learner object.
@@ -182,12 +208,12 @@ class DeepWalker(object):
         """
         Creating random walks from each node.
         """
-        self.paths = []        
+        self.paths = []
         for node in tqdm(self.graph.nodes()):
             for k in range(self.args.number_of_walks):
                 walk = self.weighted_small_walk(node)
                 self.paths.append(walk)
-                
+
         print("# of DeepWalks: {}".format(len(self.paths)))
 
         file = "{}{}-deepwalk_{}-num_walks_{}-len_metapath.txt".format(self.args.input_path, self.args.idx_metapath, self.args.number_of_walks, self.args.walk_length)

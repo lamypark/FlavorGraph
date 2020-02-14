@@ -7,7 +7,7 @@ from graph2vec import Metapath2Vec, Node2Vec
 from plotter import plot_embedding
 
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 
 def main():
@@ -29,11 +29,11 @@ def main():
     """
     2. Metapath2vec with MetaPathWalker - Ingredient-Ingredient / Ingredient-Food-like Compound / Ingredient-Drug-like Compound
     """
-    
+
     if args.idx_embed == 'Node2vec':
         node2vec = Node2Vec(args, graph)
         node2vec.train()
-        
+
     else:
         metapath2vec = Metapath2Vec(args, graph)
         metapath2vec.train()
