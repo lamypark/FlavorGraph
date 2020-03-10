@@ -233,8 +233,8 @@ def make_plot_with_labels_legends(name, points, labels, label_to_plot, legend_la
     traces = []
     annotations = []
     
-    with open("./input/dict_ingr2count.pickle", "rb") as pickle_file:
-        ingr2count = pickle.load(pickle_file)
+#     with open("./input/dict_ingr2count.pickle", "rb") as pickle_file:
+#         ingr2count = pickle.load(pickle_file)
     
     for legend_label, group in itertools.groupby(full, lambda x: x[2]):
         group_points = []
@@ -267,56 +267,23 @@ def make_plot_with_labels_legends(name, points, labels, label_to_plot, legend_la
         )
         )
         
-        print(legend_label, len(group_points), len(group_labels))
+#         print(legend_label, len(group_points), len(group_labels))
         
-        if legend_label == 'Hub_Ingredient':
-            hub_ingr2count = {}
-            for label in group_labels:
-                hub_ingr2count[label] = ingr2count[label]
+#         if legend_label == 'Hub_Ingredient':
+#             hub_ingr2count = {}
+#             for label in group_labels:
+#                 hub_ingr2count[label] = ingr2count[label]
                 
-            #Sampling
-            sorted_ingr2count = sorted(hub_ingr2count.items(), key=operator.itemgetter(1), reverse=True)
-            top = sorted_ingr2count[:100]
-            bottom = random.sample(sorted_ingr2count[100:], 100)
-            selected_hubs = []
-            for x, y in zip(top, bottom):
-                selected_hubs.append(group_labels.index(x[0]))
-                selected_hubs.append(group_labels.index(y[0]))
-            sampled_group_points = [group_points[i] for i in selected_hubs]
-            sampled_group_labels = [group_labels[i] for i in selected_hubs]
-            
-            for point, label in zip(sampled_group_points, sampled_group_labels):
-                #print(point)
-                annotations.append(go.layout.Annotation(
-                    x=point[0],
-                    y=point[1],
-                    xref="x",
-                    yref="y",
-                    text=label,
-                    showarrow=True,
-                    font=dict(
-                        family="Courier New, monospace",
-                        size=15,
-                        color="blue"
-                        ),
-                    align="center",
-                    arrowhead=3,
-                    arrowsize=5,
-                    arrowwidth=5,
-                    arrowcolor="black",
-                    ax=5,
-                    ay=5,
-                    #bordercolor="#c7c7c7",
-                    #borderwidth=2,
-                    #borderpad=4,
-                    #bgcolor="#ff7f0e",
-                    opacity=0.8
-                )
-                )
-        else:
-            res = random.sample(range(1, len(group_points)), label_to_plot[legend_label])
-            sampled_group_points = [group_points[i] for i in res]
-            sampled_group_labels = [group_labels[i] for i in res]
+#             #Sampling
+#             sorted_ingr2count = sorted(hub_ingr2count.items(), key=operator.itemgetter(1), reverse=True)
+#             top = sorted_ingr2count[:100]
+#             bottom = random.sample(sorted_ingr2count[100:], 100)
+#             selected_hubs = []
+#             for x, y in zip(top, bottom):
+#                 selected_hubs.append(group_labels.index(x[0]))
+#                 selected_hubs.append(group_labels.index(y[0]))
+#             sampled_group_points = [group_points[i] for i in selected_hubs]
+#             sampled_group_labels = [group_labels[i] for i in selected_hubs]
             
 #             for point, label in zip(sampled_group_points, sampled_group_labels):
 #                 #print(point)
@@ -329,16 +296,16 @@ def make_plot_with_labels_legends(name, points, labels, label_to_plot, legend_la
 #                     showarrow=True,
 #                     font=dict(
 #                         family="Courier New, monospace",
-#                         size=8,
-#                         color="black"
+#                         size=15,
+#                         color="blue"
 #                         ),
 #                     align="center",
-#                     arrowhead=1,
-#                     arrowsize=1,
-#                     arrowwidth=1,
+#                     arrowhead=3,
+#                     arrowsize=5,
+#                     arrowwidth=5,
 #                     arrowcolor="black",
-#                     ax=0,
-#                     ay=0,
+#                     ax=5,
+#                     ay=5,
 #                     #bordercolor="#c7c7c7",
 #                     #borderwidth=2,
 #                     #borderpad=4,
@@ -346,6 +313,39 @@ def make_plot_with_labels_legends(name, points, labels, label_to_plot, legend_la
 #                     opacity=0.8
 #                 )
 #                 )
+#         else:
+#             res = random.sample(range(1, len(group_points)), label_to_plot[legend_label])
+#             sampled_group_points = [group_points[i] for i in res]
+#             sampled_group_labels = [group_labels[i] for i in res]
+            
+#         for point, label in zip(sampled_group_points, sampled_group_labels):
+#             #print(point)
+#             annotations.append(go.layout.Annotation(
+#                 x=point[0],
+#                 y=point[1],
+#                 xref="x",
+#                 yref="y",
+#                 text=label,
+#                 showarrow=True,
+#                 font=dict(
+#                     family="Courier New, monospace",
+#                     size=8,
+#                     color="black"
+#                     ),
+#                 align="center",
+#                 arrowhead=1,
+#                 arrowsize=1,
+#                 arrowwidth=1,
+#                 arrowcolor="black",
+#                 ax=0,
+#                 ay=0,
+#                 #bordercolor="#c7c7c7",
+#                 #borderwidth=2,
+#                 #borderpad=4,
+#                 #bgcolor="#ff7f0e",
+#                 pacity=0.8
+#             )
+#             )
 
     # order the legend
     ordered = [[trace for trace in traces if trace.name == lab] for lab in legend_order]
@@ -390,11 +390,8 @@ def make_plot_with_labels_legends(name, points, labels, label_to_plot, legend_la
         plot_bgcolor='rgba(0,0,0,0)',
     )
     fig = go.Figure(data=traces_ordered, layout=layout)
-    #img_bytes = fig.to_image(format="png")
-    #Image(img_bytes)
     if publish:
         plotter = py.iplot
     else:
         plotter = offline.plot
-    name_ = name.replace("E31", "For_writing_E31")
-    plotter(fig, filename=name_+'.html')
+    plotter(fig, filename=name + '.html')
