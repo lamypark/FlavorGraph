@@ -12,9 +12,19 @@ This repository provides a Pytorch implementation of **FlavorGraph2Vec**, traine
 > For more details to find out what we do, please visit *https://dmis.korea.ac.kr/*
 
 ## Pipeline & Abstract
-![figure](/data/figure_together.png)
+![FlavorGraph](/images/flavorgraph.png)
 <p align="center">
-  <b> FlavorGraph (Left) & FlavorGraph2Vec Architecture (Right) </b>
+  <b> FlavorGraph </b>
+</p>
+
+![FlavorGraph2Vec](/images/flavorgraph2vec.png)
+<p align="center">
+  <b> FlavorGraph2Vec Architecture </b>
+</p>
+
+![Embeddings](/images/embeddings.png)
+<p align="center">
+  <b> FlavorGraph2Vec Node Embeddings </b>
 </p>
 
 **Abstract** <br>
@@ -58,9 +68,9 @@ python3 src/main.py --number_of_walks 100 \
 
 After the model is trained, a pickle file containing node embeddings from FlavorGraph2Vec and their corresponding tSNE projections will be created in `output` folder. 
 
-- **[Pickle file containing the 300D FlavorGraph node embeddings](which_link?) (209MB)** <br>
+- **[Pickle file containing the 300D FlavorGraph node embeddings](which_link?) (10MB)** <br>
 
-- **[t-SNE projections of the 300D FlavorGraph node embeddings](which_link?) (209MB)** <br>
+- **[t-SNE projections of the 300D FlavorGraph node embeddings](which_link?) (10MB)** <br>
 
 ## Contributors
 **Donghyeon Park, Keonwoo Kim** <br>
