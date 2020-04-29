@@ -29,14 +29,14 @@ def main():
     """
     2. Metapath2vec with MetaPathWalker - Ingredient-Ingredient / Ingredient-Food-like Compound / Ingredient-Drug-like Compound
     """
+    
+    if args.idx_embed == 'Node2vec':
+        node2vec = Node2Vec(args, graph)
+        node2vec.train()
 
-#     if args.idx_embed == 'Node2vec':
-#         node2vec = Node2Vec(args, graph)
-#         node2vec.train()
-
-#     else:
-#         metapath2vec = Metapath2Vec(args, graph)
-#         metapath2vec.train()
+    else:
+        metapath2vec = Metapath2Vec(args, graph)
+        metapath2vec.train()
 
     """
     3. Plot your embedding if you like
@@ -46,7 +46,7 @@ def main():
     """
     4. Evaluate Node Classification & Node Clustering
     """
-#     evaluate(args, graph)
+    evaluate(args, graph)
 
 if __name__ == "__main__":
     main()

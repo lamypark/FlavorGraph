@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import pickle
 import networkx as nx
 from tqdm import tqdm, trange
@@ -93,10 +94,15 @@ def evaluate(args, graph):
                 print(name)
 
 
-    train_ratios = [0.2, 0.4, 0.6, 0.8]
+    nmis = []
+    train_ratios = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
     for ratio in train_ratios:
-        print("\nratio:", ratio)
-        train(X, y, ratio)
+        nmi = train(X, y, ratio)
+        print(nmi)
+        nmis.append(nmi)
+    print(np.mean(nmis))
+    print(np.std(nmis))
+        
 
     # For Binary Vectors
     if args.CSP_save:
@@ -116,11 +122,15 @@ def evaluate(args, graph):
                 X.append(vec)
                 y.append(category)
 
-        train_ratios = [0.2, 0.4, 0.6, 0.8]
+        train_ratios = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+        nmis = []
         for ratio in train_ratios:
-            print("\nratio:", ratio)
-            train(X, y, ratio)
-
+            nmi = train(X, y, ratio)
+            print(nmi)
+            nmis.append(nmi)
+        print("nmi mean: %f" % (np.mean(nmis)))
+        print("nmi std: %f" % (np.std(nmis)))
+        
     return
 
 def train(X, y, train_ratio):
@@ -137,24 +147,24 @@ def train(X, y, train_ratio):
     """
     Classification
     """
-    #clf = LogisticRegression(C=1000.0, random_state=0).fit(X_train, y_train)
-    clf = svm.SVC(kernel='linear', C=1e30).fit(X_train, y_train)
-    y_pred = clf.predict(X_test)
+#     clf = LogisticRegression(C=1000.0, random_state=0).fit(X_train, y_train)
+#     clf = svm.SVC(kernel='linear', C=1e30).fit(X_train, y_train)
+#     y_pred = clf.predict(X_test)
 
-    #print(y_test)
-    #print(y_pred)
-    #print("accuracy: %.2f" %accuracy_score(y_test, y_pred))
-    #print("Precision : %.3f" % precision_score(y_test, y_pred))
-    #print("Recall : %.3f" % recall_score(y_test, y_pred))
-    #print("F1-micro : %.3f" % f1_score(y_test, y_pred, average='micro'))
-    #print("F1-macro : %.3f" % f1_score(y_test, y_pred, average='macro'))
-    f1_micro = f1_score(y_test, y_pred, average='micro')
-    f1_macro = f1_score(y_test, y_pred, average='macro')
+#     print(y_test)
+#     print(y_pred)
+#     print("accuracy: %.2f" %accuracy_score(y_test, y_pred))
+#     print("Precision : %.3f" % precision_score(y_test, y_pred))
+#     print("Recall : %.3f" % recall_score(y_test, y_pred))
+#     print("F1-micro : %.3f" % f1_score(y_test, y_pred, average='micro'))
+#     print("F1-macro : %.3f" % f1_score(y_test, y_pred, average='macro'))
+#     f1_micro = f1_score(y_test, y_pred, average='micro')
+#     f1_macro = f1_score(y_test, y_pred, average='macro')
 
-    print("F1-macro")
-    print(f1_macro)
-    print("F1-micro")
-    print(f1_micro)
+#     print("F1-macro")
+#     print(f1_macro)
+#     print("F1-micro")
+#     print(f1_micro)
 
     """
     Clustering
@@ -165,12 +175,11 @@ def train(X, y, train_ratio):
     import nltk
 
     NUM_CLUSTERS=8
-    kclusterer = KMeansClusterer(NUM_CLUSTERS, distance=nltk.cluster.util.cosine_distance, repeats=25, avoid_empty_clusters=True)
+    kclusterer = KMeansClusterer(NUM_CLUSTERS, distance=nltk.cluster.util.cosine_distance,  repeats=100, normalise=True, avoid_empty_clusters=True)
     assigned_clusters = kclusterer.cluster(X, assign_clusters=True)
-    #set(assigned_clusters)
     nmi = normalized_mutual_info_score(assigned_clusters, y)
-    print("NMI")
-    print(nmi)
+    return nmi
+    
 
 def tab_printer(args):
     """
