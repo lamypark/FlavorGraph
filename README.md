@@ -75,15 +75,19 @@ After the model is trained, a pickle file containing node embeddings from Flavor
 ## Contributors
 **Donghyeon Park, Keonwoo Kim** <br>
 DMIS Labatory, Korea University, Seoul, South Korea <br>
-Please, report bugs and missing info to Donghyeon `parkdh (at) korea.ac.kr`.
+Please, report bugs and missing info to Donghyeon `parkdh (at) sejong.ac.kr`.
 
 ## Citation
 ```
-@article{park2019kitchenette,
-  title={KitcheNette: Predicting and Ranking Food Ingredient Pairings using Siamese Neural Networks},
-  author={Park, Donghyeon and Kim, Keonwoo and Park, Yonggyu and Shin, Jungwoon and Kang, Jaewoo},
-  journal={Proceedings of the Twenty-Eighth International Joint Conference on Artificial Intelligence},
-  year={2019}
+@article{park2021flavorgraph,
+  title={FlavorGraph: a large-scale food-chemical graph for generating food representations and recommending food pairings},
+  author={Park, Donghyeon and Kim, Keonwoo and Kim, Seoyoon and Spranger, Michael and Kang, Jaewoo},
+  journal={Scientific reports},
+  volume={11},
+  number={1},
+  pages={1--13},
+  year={2021},
+  publisher={Nature Publishing Group}
 }
 ```
 
