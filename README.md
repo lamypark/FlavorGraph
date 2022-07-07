@@ -40,10 +40,10 @@ Food pairing is an area that has not yet been fully pioneered, despite our every
 
 ## Dataset
 
-- **[Generated pairing paths for training FlavorGraph2Vec](https://drive.google.com/file/d/1nzRrXCsnDYmc8z6KDAQo6RyWJZeKiFUZ/view?usp=sharing) (209MB)** <br>
+- **[Generated pairing paths for training FlavorGraph2Vec](https://drive.google.com/file/d/1MgkxIjKUVj8yfEvB1Zh7-QP0L9iKJbEl/view?usp=sharing) (209MB)** <br>
 To train the model with pre-generated pairing paths, download the above file containing user-specified paths and place it in `input/paths` folder <br> 
 
-- **[node2fp_revised_1120.pickle](https://drive.google.com/open?id=1hEvll6EFZWu6P-sT3ppQBFXAKbGa6D7v) (11MB)** <br>
+- **[node2fp_revised_1120.pickle]https://drive.google.com/file/d/1MPZvz6PV5yisiu2cNPRsRzH-d0ZT57Ot/view?usp=sharing) (11MB)** <br>
 To train the model with Chemical Structure Prediction Layer, download the above file containing food&drug-like compound fingerprints and place it in `input` folder <br>
 
 ## Training & Test
@@ -68,13 +68,13 @@ python3 src/main.py --number_of_walks 100 \
 
 After the model is trained, a pickle file containing node embeddings from FlavorGraph2Vec and their corresponding tSNE projections will be created in `output` folder. 
 
-- **[Pickle file containing the 300D FlavorGraph node embeddings](which_link?) (10MB)** <br>
-
-- **[t-SNE projections of the 300D FlavorGraph node embeddings](which_link?) (10MB)** <br>
+- **[Pickle file containing the 300D FlavorGraph node embeddings](https://drive.google.com/file/d/1MN2dGr-e8x09XSfj0kG4MahTRFY8GDw4/view?usp=sharing) (10MB)** <br>
 
 ## Contributors
-**Donghyeon Park, Keonwoo Kim** <br>
-DMIS Labatory, Korea University, Seoul, South Korea <br>
+**Donghyeon Park1, Keonwoo Kim2** <br>
+1. Assistant Professor, FNAI Labatory, Sejong University, Seoul South Korea <br>
+2. Ph.D. Candidate, DMIS Labatory, Korea University, Seoul, South Korea <br>
+
 Please, report bugs and missing info to Donghyeon `parkdh (at) sejong.ac.kr`.
 
 ## Citation
